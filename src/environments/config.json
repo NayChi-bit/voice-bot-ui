@@ -1,0 +1,12 @@
+{
+    "system": {
+      "policy": {
+        "login": true,
+        "userIdMin": 6,
+        "userIdMax": 64,
+        "passwordComplicate": false,
+        "passwordMin": 6,
+        "passwordMax": 255
+      }
+    }
+  }

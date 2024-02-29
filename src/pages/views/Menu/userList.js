@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Table from "@/components/table";
+import Table from "../../../components/table";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight, faFileLines, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import user from "@/pages/api/user";
+import user from "../../api/user";
 
 
 export default function UserList(){

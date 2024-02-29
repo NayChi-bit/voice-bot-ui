@@ -3,7 +3,7 @@ import "../pages/styles/globals.css";
 
 import Head from "next/head";
 
-export default function layout({ top, children }) {
+export default function Layout({ top, children }) {
   const title = "部署・担当者管理システム";
   const [userName, setUserName] = useState("");
 

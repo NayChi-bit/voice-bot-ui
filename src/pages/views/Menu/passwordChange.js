@@ -22,30 +22,29 @@ export default function PasswordChange() {
   const minCharTypes = 3;
 
   // sessionから取得
-  const userId = sessionStorage.getItem("userId");
-  const userName = sessionStorage.getItem("userName");
+  // const userId = (sessionStorage !== undefined) ? sessionStorage.getItem("userId") : "";
+  // const userName = (sessionStorage !== undefined) ? sessionStorage.getItem("userName") : "";
 
    // パスワード変えるModeセットアップ
    useEffect(() => {
-    console.debug("change password useEffect");
-    const mode = sessionStorage.getItem("mode");
+    // const mode = (sessionStorage !== undefined) ? sessionStorage.getItem("mode") : "";
 
-    setMode(mode);
+    // setMode(mode);
   });
 
   // 戻るボタンクリック
   const handleBackSearchClick = (e) => {
-    if (mode === "reset") {
-      router.push("/");
-    } else if (mode === "user_reset") {
-      router.push("userDetail");
-    } else {
-      // setEnteredCurrentPassword("");
-      // setEnteredNewPassword("");
-      // setEnteredConfirmPassword("");
-      e.preventDefault();
-      e.target.reset();
-    }
+    // if (mode === "reset") {
+    //   router.push("/");
+    // } else if (mode === "user_reset") {
+    //   router.push("userDetail");
+    // } else {
+    //   // setEnteredCurrentPassword("");
+    //   // setEnteredNewPassword("");
+    //   // setEnteredConfirmPassword("");
+    //   e.preventDefault();
+    //   e.target.reset();
+    // }
   };
 
   // パスワード変更ボタンクリック
@@ -90,8 +89,8 @@ export default function PasswordChange() {
     }
     if (mode === "reset") {
       // バックエンド登録処理
-      var editUser = sessionStorage.getItem("userName");
-      var resetToken = sessionStorage.getItem("resetToken");
+      // var editUser = ((sessionStorage !== undefined) && sessionStorage.getItem("userName")) ? sessionStorage.getItem("userName") : "";
+      // var resetToken = ((sessionStorage !== undefined) && sessionStorage.getItem("resetToken")) ? sessionStorage.getItem("resetToken") : "";
       var formData = {
         token: resetToken,
         newPassword: newPassword,
@@ -109,13 +108,13 @@ export default function PasswordChange() {
           if (response.status == 200) {
             // 登録が成功したら確認画面を表示
 
-            sessionStorage.removeItem("mode");
-            sessionStorage.removeItem("resetToken");
-            sessionStorage.removeItem("userName");
+            // (sessionStorage !== undefined) && sessionStorage.removeItem("mode");
+            // (sessionStorage !== undefined) && sessionStorage.removeItem("resetToken");
+            // (sessionStorage !== undefined) && sessionStorage.removeItem("userName");
 
-            sessionStorage.setItem("authToken", data.token);
-            //sessionStorage.setItem("role", data.role);
-            sessionStorage.setItem("userName", data.username);
+            // (sessionStorage !== undefined) && sessionStorage.setItem("authToken", data.token);
+            // //sessionStorage.setItem("role", data.role);
+            // (sessionStorage !== undefined) && sessionStorage.setItem("userName", data.username);
             showConfirmation();
           } else if (response.status == 401) {
             setErrors("認証の有効期限が切れました");
@@ -136,7 +135,8 @@ export default function PasswordChange() {
     } else if (mode === "user_reset") {
       console.debug("changePasswordClick user_reset");
       // バックエンド登録処理
-      var editUser = sessionStorage.getItem("editUser");
+      //var editUser = sessionStorage.getItem("editUser");
+      var editUser = "temp";
       var formData = {
         newPassword: newPassword,
         username: editUser,
@@ -170,7 +170,8 @@ export default function PasswordChange() {
       handleChangePassword();
     } else {
       // バックエンド登録処理
-      var editUser = sessionStorage.getItem("userName");
+      //var editUser = sessionStorage.getItem("userName");
+      editUser = "temp";
       var formData = {
         currentPassword: currentPassword,
         newPassword: newPassword,

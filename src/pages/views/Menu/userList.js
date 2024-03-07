@@ -19,9 +19,7 @@ export default function UserList(){
         try {
             const response = await user();
             // APIの結果が正常だった場合
-            // 0:登録成功
-            // 1:現在のパスワード不一致
-            // 2:該当ユーザーなし or その他エラー
+            // 該当ユーザーなし or その他エラー
             if (response.status == 200 && response !== null) {
                 const res = await response.json();
                 setData(res);

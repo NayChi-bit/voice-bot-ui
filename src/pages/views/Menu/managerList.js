@@ -148,27 +148,43 @@ export default function ManagerList(){
 
     ]
 
+    console.log("////" + JSON.stringify(data));
     return(
-        <div className="call-log-viewer-container">
-            <h2 className="font-weight-bold">担当者一覧</h2>
-            <div className="inner-container">
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px" }}
-                >追加</button>
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px" }}
-                >一括管理</button>
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px", marginLeft: "auto" }}
-                >絞込み</button>
+        // <div className="call-log-viewer-container">
+        //     <h2 className="font-weight-bold">担当者一覧</h2>
+        //     <div className="inner-container">
+        //     <button
+        //           className="btn  btn-outline-dark btn-sm"
+        //           onClick={userAdd}
+        //           style={{ minWidth: "60px" }}
+        //         >追加</button>
+        //     <button
+        //           className="btn  btn-outline-dark btn-sm"
+        //           onClick={userAdd}
+        //           style={{ minWidth: "60px" }}
+        //         >一括管理</button>
+        //     <button
+        //           className="btn  btn-outline-dark btn-sm"
+        //           onClick={userAdd}
+        //           style={{ minWidth: "60px", marginLeft: "auto" }}
+        //         >絞込み</button>
+        //     </div>
+        //     <Table columns={columns} data={data} />
+        // </div>
+        <main>
+            <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-diagram-3-fill"></i>&nbsp;部署一覧</h1>
+            <div className="row mb-3">
+                <div className="col-6 text-start">
+                    <button type="button" className="btn btn-danger" style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
+                    <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
+                </div>
+                <div className="col-6 text-end">
+                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
+                    
+                    <a href="#"><button type="button" className="btn btn-dark" style={{ padding: "10px 40px" }}>階層表示</button></a>
+                </div>
             </div>
             <Table columns={columns} data={data} />
-        </div>
+        </main>
     );
 }

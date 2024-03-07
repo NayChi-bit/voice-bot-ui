@@ -1,13 +1,90 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../../components/table";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleRight, faFileLines, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import organization from "../../api/organization";
 
 export default function OrganizationList(){
 
     // router
     const router = useRouter();
+    const [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
+    "level" : null,  "parentDepartmentId" : null, "aliasName" : null, "ph" : null, "remarks" : null, "operation" : null, hasRecord : false}]);
+    
+    const [error, setErrors] = useState("");
+
+    useEffect(() => {
+        // const fetchData = async () => {
+        //     try {
+        //         const result = await showList();
+        //         setData(result);
+        //     } catch (error) {
+        //         console.error('Error fetching data:', error);
+        //     }
+        // };
+
+        // fetchData();
+        showList();
+    }, []);
+
+    const showList = async () => {
+        try {
+            const response = await organization();
+            // APIの結果が正常だった場合
+            // 部署なし or その他エラー
+            if (response.status == 200 && response !== null) {
+                const res = await response.json();
+
+                const result = processData(res);
+                
+                setData(result);
+                return result;
+  
+            } else if (response.status == 401) {
+              setErrors("認証の有効期限が切れました");
+              return false;
+            }
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
+            return false;
+        }  
+    }
+
+    const processData = (data) => {
+        const parentRows = [];
+        data.map(row => {
+            const aliasNames = row.organizationAliasList.map(obj => obj.aliasName);
+            const aliasName = aliasNames.join(', ');
+            // レコードあるチャック
+            const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+                //上位組織あるチャック
+            if(row.parentDepartmentId !== null){
+
+                //全ての階層にチャック
+                parentRows.forEach((parentRow) => {
+                    if(parentRow.departmentId == row.parentDepartmentId){
+                        parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                    }
+                    
+                    if(parentRow.subRows){
+                        parentRow.subRows.forEach(subRow => {
+                            if(subRow.departmentId == row.parentDepartmentId){
+                                subRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                            }
+                        })
+                    }
+                });
+                
+            }else{
+                // Add the parent row to the parentRows array
+                parentRows.push({ ...row, subRows: [], hasRecord, aliasName });
+            }
+        });
+
+        return parentRows;
+    }
 
     const userAdd = () => {
         router.push("User/userRegister")
@@ -27,154 +104,83 @@ export default function OrganizationList(){
                             })}
                         >
                             {row.isExpanded ? (
-                                <FontAwesomeIcon icon={faAngleDown} />
+                                <i className="bi bi-arrow-down-square-fill fs-4" />
                                 ) : (
-                                <FontAwesomeIcon icon={faAngleRight} />
+                                <i className="bi bi-arrow-right-square-fill fs-4" />
                             )}
+
                         </span>
                     ) : null,
             },
             {
-                Header: 'ユーザID',
-                accessor: 'userId',
+                id: 'name',
+                Header: '部署名',
+                accessor: 'name',
             },
             {
-                Header: 'ユーザ名',
-                accessor: 'userName',
+                id: 'readName',
+                Header: 'よみ',
+                accessor: 'readName',
             },
             {
-                Header: 'リセット',
-                accessor: 'reset',
+                id: 'id',
+                Header: 'ID',
+                accessor: 'id',
             },
             {
-                Header: 'ロック',
-                accessor: 'lock',
+                id: 'departmentId',
+                Header: 'コード',
+                accessor: 'departmentId',
             },
             {
-                Header: ' ',
-                accessor: 'delete',
-                Cell: (props) => (
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  ),
+                id: 'level',
+                Header: '階層',
+                accessor: 'level',
             },
             {
-                Header: ' ',
-                accessor: 'detail',
-                Cell: (props) => (
-                    <FontAwesomeIcon icon={faFileLines} />
-                  ),
+                id: 'parentDepartmentId',
+                Header: '上位組織',
+                accessor: 'parentDepartmentId',
+            },
+            {
+                id: 'aliasName',
+                Header: '別名',
+                accessor: 'aliasName',
+            },
+            {
+                id: 'ph',
+                Header: '電話番号',
+                accessor: 'ph',
+            },
+            {
+                id: 'remarks',
+                Header: '備考',
+                accessor: 'remarks',
+            },
+            {
+                id: 'operation',
+                Header: '操作',
+                accessor: 'operation',
             },
         ],
         []
     )
 
-    const data = [
-        {
-            "userId": "user1",
-            "userName": "nay1",
-            "reset": "false",
-            "lock": "false",
-            "subRows": [
-                {
-                    "userId": "user2",
-                    "userName": "nay2",
-                    "reset": "false",
-                    "lock": "false",
-                    "delete": "icon",
-                    "detail": "icon",
-                    "subRows": [
-                        {
-                            "userId": "user3",
-                            "userName": "nay3",
-                            "reset": "false",
-                            "lock": "false",
-                            "delete": "icon",
-                            "detail": "icon",
-                        }
-                    ]
-                },
-                {
-                    "userId": "user4",
-                    "userName": "nay4",
-                    "reset": "false",
-                    "lock": "false",
-                    "subRows": [
-                        {
-                            "userId": "user5",
-                            "userName": "nay5",
-                            "reset": "false",
-                            "lock": "false",
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "userId": "user1",
-            "userName": "nay1",
-            "reset": "false",
-            "lock": "false",
-            "subRows": [
-                {
-                    "userId": "user2",
-                    "userName": "nay2",
-                    "reset": "false",
-                    "lock": "false",
-                    "subRows": [
-                        {
-                            "userId": "user3",
-                            "userName": "nay3",
-                            "reset": "false",
-                            "lock": "false",
-                        }
-                    ]
-                },
-                {
-                    "userId": "user4",
-                    "userName": "nay4",
-                    "reset": "false",
-                    "lock": "false",
-                    "subRows": [
-                        {
-                            "userId": "user5",
-                            "userName": "nay5",
-                            "reset": "false",
-                            "lock": "false",
-                        }
-                    ]
-                }
-            ]
-        }
-
-    ]
-
     return(
-        <div className="call-log-viewer-container">
-            <h2 className="font-weight-bold">部署一覧</h2>
-            <div className="inner-container">
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px" }}
-                >追加</button>
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px" }}
-                >一括管理</button>
-            <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px", marginLeft: "auto" }}
-                >絞込み</button>
-                <button
-                  className="btn  btn-outline-dark btn-sm"
-                  onClick={userAdd}
-                  style={{ minWidth: "60px", marginLeft: "auto" }}
-                >階層表示
-                </button>
+        <main>
+            <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-diagram-3-fill"></i>&nbsp;部署一覧</h1>
+            <div className="row mb-3">
+                <div className="col-6 text-start">
+                    <button type="button" className="btn btn-danger" style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
+                    <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
+                </div>
+                <div className="col-6 text-end">
+                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
+                    
+                    <a href="#"><button type="button" className="btn btn-dark" style={{ padding: "10px 40px" }}>階層表示</button></a>
+                </div>
             </div>
             <Table columns={columns} data={data} />
-        </div>
+        </main>
     );
 }

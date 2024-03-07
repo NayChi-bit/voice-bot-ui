@@ -21,10 +21,6 @@ export default function Home() {
     sessionStorage.removeItem("resetToken");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("userName");
-    // if (!isLoginEnabled) {
-    //   console.debug("loginSkip:");
-    //   router.push("views/search");
-    // }
   });
 
   // formData
@@ -111,53 +107,47 @@ export default function Home() {
   return (
     <RootLayout top={true}>
       {isLoginEnabled && (
-        <div className="login-container">
-          <form id="loginForm" method="post" onSubmit={handleSubmit}>
-            <div className="form-group row">
-              <label
-                htmlFor="userId"
-                className="col-md-4 col-form-label text-md-right"
-              >
-                ユーザID
-              </label>
-              <div className="col-md-8">
+        <div className="container text-center signin">
+          <main className="form-signin">
+            <form method="post" onSubmit={handleSubmit}>
+              <i className="bi bi-person-square"  style={{fontSize: "4rem"}}></i>
+              <h1 className="h3 mb-3 fw-normal">システムへのログイン</h1>
+              <div className="error-message" id="error-message"></div>
+              <div className="form-floating mb-3">
                 <input
                   type="text"
-                  className="form-control string-input"
-                  id="userId"
+                  className="form-control custom-input"
+                  id="floatingInput"
                   name="userId"
                   placeholder="ユーザID"
                   value={formData.userId}
                   onChange={handleChange}
                 />
+              <label htmlFor="floatingInput">ユーザーID</label>
+            
               </div>
-            </div>
-            <div className="form-group row">
-              <label
-                htmlFor="password"
-                className="col-md-4 col-form-label text-md-right"
-              >
-                パスワード
-              </label>
-              <div className="col-md-8">
+              <div className="form-floating">
                 <input
                   type="password"
-                  className="form-control string-input"
-                  id="password"
+                  className="form-control custom-input"
+                  id="floatingPassword"
                   name="password"
                   placeholder="パスワード"
                   value={formData.password}
                   onChange={handleChange}
                 />
+                <label htmlFor="floatingPassword">パスワード</label>
               </div>
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary login-button">
-                ログイン
-              </button>
-            </div>
-            <div className="error-message" id="error-message"></div>
-          </form>
+              <div className="checkbox mb-4 mt-4">
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate" />
+                  <label className="form-check-label" htmlFor="flexCheckIndeterminate">&nbsp;&nbsp;ログイン状態を保持する</label>
+                </div>
+              </div>
+              <button className="w-100 btn btn-lg btn-primary" type="submit" style={{padding: "12px 0px"}}>ログイン</button>
+              <p className="mt-3 forget"><a href="#">IDやパスワードをお忘れの場合</a></p>
+            </form>
+          </main>
         </div>
       )}
     </RootLayout>

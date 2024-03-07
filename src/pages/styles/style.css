@@ -1,0 +1,249 @@
+@charset "utf-8";
+
+
+
+
+
+/* ------------------------------------------------
+   BODYの基本のCSS
+------------------------------------------------ */
+body {
+background-color: #f6f9ff;
+font-family: "Noto Sans JP", sans-serif;
+font-weight:400;
+font-style: normal;
+}
+
+
+
+/* ------------------------------------------------
+   HEADERエリアのCSS
+------------------------------------------------ */
+header {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 10;
+background-color: #27acd9;
+color: #FFF;
+font-size: 20px;
+padding: 10px 10px 10px 10px;
+}
+
+header h1.title {
+font-size: 24px;
+color: #FFF;
+}
+
+header h1.title i.bi.bi-person-square {
+font-size: 30px;
+padding-right: 10px;
+padding-left: 10px;
+vertical-align: -2px;
+}
+
+
+
+/* ------------------------------------------------
+   コンテンツ全体のCSS
+------------------------------------------------ */
+.body-wrapper01 {
+margin-left: 240px;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+padding-top: 64px;
+}
+
+.body-wrapper02 {
+margin-left: 240px;
+height: 100vh;
+padding-top: 100px;
+}
+
+.body-wrapper01 div.container-fluid {
+max-width: 1200px;
+margin: 0 auto;
+text-align: center;
+}
+
+.body-wrapper02 div.container-fluid {
+max-width: 1200px;
+margin: 0 auto;
+text-align: center;
+}
+
+.content {
+margin-left: 250px;
+padding: 20px;
+}
+
+
+/* ------------------------------------------------
+   サイドメニューのCSS
+------------------------------------------------ */
+.sidebar {
+position: fixed;
+top: 64px;
+left: 0;
+height: 100%;
+width: 250px;
+background-color: #333;
+padding-top: 40px;
+}
+
+.sidebar a {
+padding: 12px 20px;
+display: block;
+color: #fff;
+text-decoration: none;
+transition: all 0.3s ease;
+font-size: 18px;
+}
+
+.sidebar a:hover {
+background-color: #555;
+transform: translateX(10px); /* ホバー時の移動 */
+}
+
+.sidebar h1 {
+font-size: 20px;
+color: #FFF;
+background: #555;
+padding: 10px 0px 15px 18px;
+}
+
+.sidebar h1 i.bi.bi-list {
+vertical-align: -1px;
+}
+
+.sidebar a i {
+padding-right: 6px;
+}
+
+
+
+/* ------------------------------------------------
+   フォームエリア上下中央のCSS
+------------------------------------------------ */
+.body-wrapper01 div.container-fluid main {
+background-color: rgb(255, 255, 255);
+transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+border-radius: 7px;
+box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+overflow: hidden;
+width: 100%;
+background-image: none;
+border: medium;
+padding-top: 35px;
+padding-bottom: 30px;
+padding-left: 60px;
+padding-right: 60px;
+}
+
+
+
+/* ------------------------------------------------
+   フォームエリア上部のCSS
+------------------------------------------------ */
+.body-wrapper02 div.container-fluid main {
+background-color: rgb(255, 255, 255);
+transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+border-radius: 7px;
+box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+overflow: hidden;
+width: 100%;
+background-image: none;
+border: medium;
+padding-top: 35px;
+padding-bottom: 30px;
+padding-left: 60px;
+padding-right: 60px;
+}
+
+
+
+/* ------------------------------------------------
+   INPUTのカスタムのCSS
+------------------------------------------------ */
+.custom-input {
+width: 350px;
+height: 50px;
+border: var(--bs-border-width) solid var(--bs-border-color);
+background: #f6f9ff;
+border-radius: 6px;
+}
+
+.custom-input:focus {
+color: var(--bs-body-color);
+background-color: var(--bs-body-bg);
+border-color: #86b7fe;
+outline: 0;
+box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+}
+
+
+
+/* ------------------------------------------------
+   ボタンのCSS
+------------------------------------------------ */
+.btn-primary {
+color: #fff;
+background-color: #27acd9;
+border-color: #27acd9;
+border-radius: 6px;
+transition: 0.5s;
+}
+
+.btn-primary:hover {
+color: #fff;
+background-color: #2195bd;
+border-color: #2195bd;
+}
+
+.btn-primary:hover {
+color: #fff;
+background-color: #2195bd;
+border-color: #2195bd;
+}
+
+.btn-primary:active {
+background-color: #2195bd !important;
+border-color: #2195bd !important;
+}
+
+
+
+/* ------------------------------------------------
+   アイコンフォント（ゴミ箱・詳細表示）のCSS
+------------------------------------------------ */
+a i.bi.bi-sticky-fill {
+color: #000;
+}
+
+a i.bi.bi-sticky-fill:hover {
+color: #27acd9;
+}
+
+a i.bi.bi-trash-fill {
+color: #000;
+}
+
+a i.bi.bi-trash-fill:hover  {
+color: #27acd9;
+}
+
+button {
+border: none;
+outline: none;
+background: transparent;
+}
+
+
+
+
+
+
+

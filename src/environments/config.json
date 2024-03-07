@@ -8,5 +8,6 @@
         "passwordMin": 6,
         "passwordMax": 255
       }
-    }
+    },
+    "apiTestUrl" : "http://localhost:8080"
   }

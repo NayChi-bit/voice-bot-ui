@@ -5,7 +5,7 @@ import { useTable, useExpanded } from 'react-table'
 import "../pages/styles/globals.css";
 
 
-function Table({ columns: userColumns, data }) {
+function Table({ columns: columns, data }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -15,8 +15,11 @@ function Table({ columns: userColumns, data }) {
         state: { expanded },
     } = useTable(
         {
-            columns: userColumns,
+            columns: columns,
             data,
+            initialState: {
+                expanded: {},
+              },
         },
        
         useExpanded // Use the useExpanded plugin hook
@@ -25,12 +28,12 @@ function Table({ columns: userColumns, data }) {
     // Render the UI for table
     return (
         <div>
-            <table className="table" {...getTableProps()}>
+            <table className="table table-bordered"  {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup, i) => (
                         <tr key={i}>
                             {headerGroup.headers.map((column, i) => (
-                                <th {...column.getHeaderProps()} key={i}>{column.render('Header')}</th>
+                                <th {...column.getHeaderProps()} key={i} scope="col" className="py-3">{column.render('Header')} </th>
                             ))}
                         </tr>
                     ))}
@@ -41,7 +44,18 @@ function Table({ columns: userColumns, data }) {
                         return (
                             <tr {...row.getRowProps()} key={i}>
                                 {row.cells.map((cell, i) => {
-                                    return <td {...cell.getCellProps()} key={i}>{cell.render('Cell')}</td>
+                                    return <td {...cell.getCellProps()} key={i} className="text-center align-middle py-3">
+                                        {cell.column.id === 'operation' ? (
+                                            cell.row.original.hasRecord ? (
+                                            <div>
+                                                <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>
+                                                <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
+                                            </div>
+                                            ) : null // Render nothing if there's no record
+                                        ) : (
+                                            cell.render('Cell')
+                                        )}
+                                    </td>
                                 })}
                             </tr>
                         )

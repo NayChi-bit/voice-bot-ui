@@ -1,257 +1,10 @@
 /* 外部ライブラリのスタイルをインポート */
-@import "./bootstrap.min.css";
-@import "./fontawesome-css/fontawesome-all.css";
+/* Bootstrap CSS*/
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 /***************************************************/
 /* 全ページスタイル                                 */
 /***************************************************/
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  /* display: flex; */
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f5f5f5;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100svh;
-}
-
-/***************************************************/
-/* 共通ヘッダー（システム名、ユーザ名、設定アイコン） */
-/*  設定アイコン->メニュー                          */
-/***************************************************/
-
-/* ヘッダースタイル */
-.jumbotron {
-  background-color: #007BFF;
-  padding: 1em 0.5em;
-  text-align: left;
-  position: relative;
-  display: flex;
-  align-items: center;
-  z-index: 4; /* 他の要素よりも手前に表示 */
-  margin-bottom: 0px;
-}
-
-.jumbotron h1 {
-  font-size: 1em;
-  color: #fff;
-  display: inline;
-  text-align: left;
-  margin-right: auto; /* 左側に余白を設定してアイコンを右寄せに */
-  margin-top: 10px;
-}
-
-/* ユーザーラベルのスタイル */
-#user-label {
-  margin-right: 10px; /* アイコンとの間隔を調整 */
-  color: #fff;
-  align-items: center;
-}
-
-/* 設定ボタンのスタイル */
-.config-button {
-  background-color: white;
-  color: black;
-  padding: 3px 10px;
-  display: none;
-  align-items: center; /* アイコンを垂直方向に中央に配置 */
-  justify-content: flex-end; /* アイコンを右詰めに配置 */
-}
-
-/* 設定ボタンアイコンのスタイル */
-.config-button i {
-  background: white; /* アイコンの背景色を白に設定 */
-}
-
-/* セットアップメニューのスタイル */
-#setupMenu {
-  position: relative;
-  display: inline-block;
-  height: 30px; /* 親要素の高さを設定 */
-}
-
-/* セットアップリストのスタイル */
-#setupList {
-  /* display: none; */
-  position: absolute;
-  top: 100%; /* ドロップダウンリストの下に配置 */
-  right: 0; /* ドロップダウンリストの右上に配置 */
-  border: 1px solid #000;
-  width: 140px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  background: #fff;
-  z-index: 5; /* ドロップダウンリストをメニューアイコンより前面に配置 */
-}
-
-/* ドロップダウンリスト項目のスタイル */
-#setupList li {
-  text-align: left;
-  padding: 2px;
-  background-color: #eee;
-  transition: background-color 0.3s;
-}
-
-#setupList li:hover {
-  background-color: #ccc;
-}
-
-/***************************************************/
-/* ログインスタイル                                 */
-/***************************************************/
-
-/* ログインコンテナのスタイル */
-.login-container {
-  margin: 0 auto;
-  padding: 40px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  margin-top: 3em;
-}
-
-/* ログインタイトルのスタイル */
-.login-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* ログインボタンのスタイル */
-.login-button {
-  width: 50%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007BFF;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-  background-color: #0056b3;
-}
-
-.login-button:focus {
-  outline: none;
-}
-
-.login-button:active {
-  transform: translateY(2px);
-}
-
-
-/***************************************************/
-/* ログイン以外のページのスタイル                    */
-/***************************************************/
-.call-log-viewer-container {
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  width: 100%;
-  padding: 0px 15px 40px 15px;
-  text-align: left;
-}
-.call-log-viewer-container h2{
-  padding: 40px 0px;
-}
-
-/***************************************************/
-/* パスワード強度スタイル                            */
-/***************************************************/
-/* プログレスバーのスタイル */
-.progress-bar {
-  width: 0;
-}
-
-.progress {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-/* パスワード強度ラベルのスタイル */
-.password-strength-label {
-  text-align: right; /* 右寄せ */
-}
-
-/***************************************************/
-/* フォーム入力スタイル                             */
-/***************************************************/
-/* フォームグループのスタイル */
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  font-weight: bold;
-}
-
-form-group input {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-/* 文字入力フィールドのスタイル */
-.string-input {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  outline: none; /* 影を削除 */
-  box-shadow: none;
-}
-
-.string-input::placeholder {
-  color: #aaa;
-}
-
-/* フォーム下のボタンコンテナのスタイル */
-.button-container {
-  display: flex;
-  justify-content: center; /* 中央に配置する */
-  margin-top: 1em; /* ボタン間の上部のマージン */
-  margin-bottom: 1em; /* ボタン間の下部のマージン */
-}
-
-.button-container button {
-  margin: 0 2em; /* ボタン間の横方向のマージンを調整 */
-}
-
-/* 小さなボタンのスタイル */
-.btn-small {
-  width: 100px;
-  height: 40px;
-  font-size: 14px;
-}
-
-.btn-small.btn-primary {
-  background-color: #007BFF;
-}
-
-.btn-small.btn-secondary {
-  background-color: #ccc;
-}
 
 /* エラーメッセージのスタイル */
 .error-message {
@@ -260,32 +13,114 @@ form-group input {
   text-align: center;
 }
 
-/* メニュー画面 */
-.menu-side{
-  background-color: #cfd0cf;
+/***************************************************/
+/* ログイン画面　　　                               */
+/***************************************************/
+.container.signin {
+  display: grid;
+  height: 100vh; /* 画面の高さを100%に設定 */
+  place-items: center; /* 子要素を上下左右中央に配置 */
 }
-.menu-side button, label{
-  margin-bottom: 20px;
+  
+.container.signin main.form-signin {
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  background-color: rgb(255, 255, 255);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 7px;
+  box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+  overflow: hidden;
+  width: 100%;
+  background-image: none;
+  border: medium;
+  padding-top: 35px;
+  padding-bottom: 30px;
+  padding-left: 60px;
+  padding-right: 60px;
 }
-.menu-side label{
-  margin-top: 40px;
+  
+.form-signin .checkbox {
+  font-weight: 400;
+}
+  
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+  
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  margin-bottom: -1px;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  width: 100%;
+}
+  
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  margin-bottom: -1px;
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  width: 100%;
+}
+  
+.form-check .form-check-input {
+  float: none;
+  margin-left: -1.5em;
+}
+  
+.form-check-input {
+  --bs-form-check-bg: var(--bs-body-bg);
+  width: 1em;
+  height: 1em;
+  margin-top: 0.3em;
+  vertical-align: top;
+  background-color: var(--bs-form-check-bg);
+  background-image: var(--bs-form-check-bg-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+  print-color-adjust: exact;
+}
+  
+.forget a {
+  color: #db4c3e;
+  text-decoration: none;
+}
+  
+.forget a:hover {
+  color: #db4c3e;
+  text-decoration: underline;
 }
 
-/* コンテイナー */
-.inner-container{
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+/***************************************************/
+/* テーブルアイコン　　                              */
+/***************************************************/
 
-.table thead th{
-  background-color: #ececec;
+a i.bi.bi-sticky-fill {
+  color: #000;
 }
-
-.table tbody tr:last-child{
-  border-bottom: 1px solid #dee2e6;
+a i.bi.bi-sticky-fill:hover {
+  color: #27acd9;
 }
-
-.table td {
-  border: 1px solid #dee2e6;
+a i.bi.bi-trash-fill {
+  color: #000;
+}
+a i.bi.bi-trash-fill:hover  {
+  color: #27acd9;
+}
+button {
+  border: none;
+  outline: none;
+  background: transparent;
 }

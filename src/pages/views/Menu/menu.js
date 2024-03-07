@@ -52,103 +52,60 @@ export default function Menu() {
 
   return (
     <RootLayout top={!isLoginEnabled}>
-      <div className="call-log-viewer-container menu-container">
-        <div className="row">
-          <div className="col-3 menu-side">
-            <div className="input-group">
-              <div className="col-12 col-md-12">
-                <label htmlFor="menu" className="menu font-weight-bold">
-                  メニュー
-                </label>
-              </div>
-              <div className="col-12 col-md-12">
-                <button
-                  className="btn  btn-outline-dark btn-sm btn-block"
-                  onClick={showOrganizationListDialog}
-                  style={{ minWidth: "60px" }}
-                >
-                  組織管理
-
-                </button>
-              </div>
-              <div className="col-12 col-md-12">
-                <button
-                  className="btn  btn-outline-dark btn-sm btn-block"
-                  onClick={showManagerListDialog}
-                  style={{ minWidth: "60px" }}
-                >
-                  担当者管理
-
-                </button>
-              </div>
-              <div className="col-12 col-md-12">
-                <button
-                  className="btn  btn-outline-dark btn-sm btn-block"
-                  // onClick={callLogManage}
-                  style={{ minWidth: "60px" }}
-                >
-                  通話ログ管理
-                  
-
-                </button>
-              </div>
-              <div className="col-12 col-md-12">
-                <button
-                  className="btn  btn-outline-dark btn-sm btn-block"
-                  onClick={showUserListDialog}
-                  style={{ minWidth: "60px" }}
-                >
-                  ユーザー管理
-
-                </button>
-              </div>
-              <div className="col-12 col-md-12">
-                <button
-                  className="btn  btn-outline-dark btn-sm btn-block"
-                  onClick={showPassChangeDialog}
-                  style={{ minWidth: "60px" }}
-                >
-                  パスワード変更
-
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="col-9">
-            <div className="col-12 col-md-12">
-              {(!isPassChangeDialog && !isUserListDialog && !isManagerListDialog && !isOrganizationListDialog) && (
-              <label htmlFor="operation" className="oper-side">
-                  operation
-              </label>
-              )}
-              {
-                isPassChangeDialog && (
-                    
-                  <PasswordChange></PasswordChange>
-                )
-              }
-              {
-                isUserListDialog && (
-                    
-                  <UserList></UserList>
-                )
-              }
-              {
-                isManagerListDialog && (
-                    
-                  <ManagerList></ManagerList>
-                )
-              }
-              {
-                isOrganizationListDialog && (
-                    
-                  <OrganizationList></OrganizationList>
-                )
-              }
-            </div>
-          </div>
-        </div>
+      <div className="sidebar">
+        <h1><i className="bi bi-list"></i>&nbsp;メニュー</h1>
+        <a href="#" onClick={showOrganizationListDialog}><i className="bi bi-building-fill"></i>&nbsp;組織管理</a>
+        <a href="#" onClick={showManagerListDialog}><i className="bi bi-person-workspace"></i>&nbsp;担当者管理</a>
+        <a href="#"><i className="bi bi-mic-fill"></i>&nbsp;通話ログ管理</a>
+        <a href="#" onClick={showUserListDialog}><i className="bi bi-person-fill"></i>&nbsp;ユーザー管理</a>
+        <a href="#" onClick={showPassChangeDialog}><i className="bi bi-unlock-fill"></i>&nbsp;パスワード変更</a>
       </div>
+      {(!isPassChangeDialog && !isUserListDialog && !isManagerListDialog && !isOrganizationListDialog) && (
+          <div className="body-wrapper01">
+              <div className="container-fluid">
+              <p className="fs-5">メニューより操作してください。</p>
+            </div>
+          </div>
+      )}
+      
+          
+          {
+            isPassChangeDialog && (
+              <div className="body-wrapper02">
+                <div className="container-fluid">
+                  
+                  <PasswordChange></PasswordChange>
+                </div>
+              </div>
+            )
+          }
+          {
+            isUserListDialog && (
+              <div className="body-wrapper02">
+                <div className="container-fluid">
+                  <UserList></UserList>
+                </div>
+              </div>
+            )
+          }
+          {
+            isManagerListDialog && (
+              <div className="body-wrapper02">
+                <div className="container-fluid">
+                <ManagerList></ManagerList>
+                </div>
+              </div>
+            )
+          }
+          {
+            isOrganizationListDialog && (
+              <div className="body-wrapper02">
+                <div className="container-fluid">
+                  <OrganizationList></OrganizationList>
+                </div>
+              </div>
+            )
+          }
     </RootLayout>
   );
 }

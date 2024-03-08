@@ -8,22 +8,22 @@ export default function OrganizationList(){
     // router
     const router = useRouter();
     const [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
-    "level" : null,  "parentDepartmentId" : null, "aliasName" : null, "ph" : null, "remarks" : null, "operation" : null, hasRecord : false}]);
+    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false}]);
     
     const [error, setErrors] = useState("");
 
     useEffect(() => {
-        // const fetchData = async () => {
-        //     try {
-        //         const result = await showList();
-        //         setData(result);
-        //     } catch (error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // };
+        const fetchData = async () => {
+            try {
+                const result = await showList();
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-        // fetchData();
-        showList();
+        fetchData();
+        //showList();
     }, []);
 
     const showList = async () => {
@@ -35,8 +35,6 @@ export default function OrganizationList(){
                 const res = await response.json();
 
                 const result = processData(res);
-                
-                setData(result);
                 return result;
   
             } else if (response.status == 401) {
@@ -59,18 +57,19 @@ export default function OrganizationList(){
             const aliasName = aliasNames.join(', ');
             // レコードあるチャック
             const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
-                //上位組織あるチャック
-            if(row.parentDepartmentId !== null){
+
+            //上位組織あるチャック
+            if(row.parentDepartmentName !== null){
 
                 //全ての階層にチャック
                 parentRows.forEach((parentRow) => {
-                    if(parentRow.departmentId == row.parentDepartmentId){
+                    if(parentRow.name === row.parentDepartmentName){
                         parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
                     }
                     
                     if(parentRow.subRows){
                         parentRow.subRows.forEach(subRow => {
-                            if(subRow.departmentId == row.parentDepartmentId){
+                            if(subRow.name === row.parentDepartmentName){
                                 subRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
                             }
                         })
@@ -138,9 +137,9 @@ export default function OrganizationList(){
                 accessor: 'level',
             },
             {
-                id: 'parentDepartmentId',
+                id: 'parentDepartmentName',
                 Header: '上位組織',
-                accessor: 'parentDepartmentId',
+                accessor: 'parentDepartmentName',
             },
             {
                 id: 'aliasName',
@@ -150,7 +149,7 @@ export default function OrganizationList(){
             {
                 id: 'ph',
                 Header: '電話番号',
-                accessor: 'ph',
+                accessor: 'phone',
             },
             {
                 id: 'remarks',

@@ -1,7 +1,7 @@
 import RootLayout from "../../../components/main";
 import PasswordChange from "./passwordChange";
 import UserList from "./userList";
-import ManagerList from "./managerList";
+import ManagerList from "./employeeList";
 import OrganizationList from "./organizationList";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";

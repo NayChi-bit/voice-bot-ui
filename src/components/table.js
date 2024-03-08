@@ -48,7 +48,7 @@ function Table({ columns: columns, data }) {
                                         {cell.column.id === 'operation' ? (
                                             cell.row.original.hasRecord ? (
                                             <div>
-                                                <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>
+                                                <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
                                                 <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
                                             </div>
                                             ) : null // Render nothing if there's no record

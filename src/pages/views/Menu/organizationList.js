@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../../components/table";
+import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
 import organization from "../../api/organization";
 
@@ -8,9 +9,21 @@ export default function OrganizationList(){
     // router
     const router = useRouter();
     const [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
-    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false}]);
+    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false }]);
     
     const [error, setErrors] = useState("");
+
+    //モデル
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = (e) => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        alert("close modal");
+        setIsModalOpen(false);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,7 +36,6 @@ export default function OrganizationList(){
         };
 
         fetchData();
-        //showList();
     }, []);
 
     const showList = async () => {
@@ -174,12 +186,26 @@ export default function OrganizationList(){
                     <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
                 </div>
                 <div className="col-6 text-end">
-                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
-                    
-                    <a href="#"><button type="button" className="btn btn-dark" style={{ padding: "10px 40px" }}>階層表示</button></a>
+                    <button type="button" onClick={openModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
                 </div>
+                
             </div>
             <Table columns={columns} data={data} />
+
+            {/* <Modal isOpen={isModalOpen} onClose={closeModal}> */}
+                {/* モーダルの設定  */}
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                    <div className="modal">
+                        <button className="modal-close" onClick={closeModal}>X</button>
+                        <div className="modal-content">
+                        <h2>Hello, this is a modal</h2>
+                        <p>This is a modal dialog created in Next.js</p>
+                        </div>
+                    </div>
+                    </div>
+                )}
+            {/* </Modal> */}
         </main>
     );
 }

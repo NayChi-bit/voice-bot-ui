@@ -244,94 +244,133 @@ export default function PasswordChange() {
   }
 
   return (
-    <div className="call-log-viewer-container">
-        <h2 className="font-weight-bold">パスワード変更</h2>
-        <form id="passwordChangeForm">
-        {isCurrentPasswordVisible && (
-            <div className="form-group row">
-            <label
-                htmlFor="current-password"
-                className="col-md-6 col-form-label text-md-left"
-            >
-                現在のパスワード
-            </label>
-            <div className="col-md-6">
-                <input
-                type="password"
-                className="form-control string-input"
-                id="current-password"
-                name="current-password"
-                placeholder="現在のパスワード"
-                // value={enteredCurrentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-                ></input>
-            </div>
-            </div>
-        )}
+    // <div className="call-log-viewer-container">
+    //     <h2 className="font-weight-bold">パスワード変更</h2>
+    //     <form id="passwordChangeForm">
+    //     {isCurrentPasswordVisible && (
+    //         <div className="form-group row">
+    //         <label
+    //             htmlFor="current-password"
+    //             className="col-md-6 col-form-label text-md-left"
+    //         >
+    //             現在のパスワード
+    //         </label>
+    //         <div className="col-md-6">
+    //             <input
+    //             type="password"
+    //             className="form-control string-input"
+    //             id="current-password"
+    //             name="current-password"
+    //             placeholder="現在のパスワード"
+    //             // value={enteredCurrentPassword}
+    //             onChange={(event) => setCurrentPassword(event.target.value)}
+    //             ></input>
+    //         </div>
+    //         </div>
+    //     )}
 
-        {/* 新しいパスワード入力欄 */}
-        <div className="form-group row">
-            <label
-            htmlFor="new-password"
-            className="col-md-6 col-form-label text-md-left"
-            >
-            新しいパスワード
-            </label>
-            <div className="col-md-6 input-group">
-            <input
-                type="password"
-                className="form-control string-input"
-                id="new-password"
-                name="new-password"
-                placeholder="新しいパスワード"
-                // value={enteredNewPassword}
-                onChange={(event) => setNewPassWord(event.target.value)}
-            ></input>
+    //     {/* 新しいパスワード入力欄 */}
+    //     <div className="form-group row">
+    //         <label
+    //         htmlFor="new-password"
+    //         className="col-md-6 col-form-label text-md-left"
+    //         >
+    //         新しいパスワード
+    //         </label>
+    //         <div className="col-md-6 input-group">
+    //         <input
+    //             type="password"
+    //             className="form-control string-input"
+    //             id="new-password"
+    //             name="new-password"
+    //             placeholder="新しいパスワード"
+    //             // value={enteredNewPassword}
+    //             onChange={(event) => setNewPassWord(event.target.value)}
+    //         ></input>
+    //         </div>
+    //     </div>
+
+    //     {/* 新しいパスワード（確認用）入力欄 */}
+    //     <div className="form-group row">
+    //         <label
+    //         htmlFor="confirm-password"
+    //         className="col-md-6 col-form-label text-md-left"
+    //         >
+    //         新しいパスワード（確認用）
+    //         </label>
+    //         <div className="col-md-6 input-group">
+    //         <input
+    //             type="password"
+    //             className="form-control string-input"
+    //             id="confirm-password"
+    //             name="confirm-password"
+    //             placeholder="新しいパスワード（確認用）"
+    //             // value={enteredConfirmPassword}
+    //             onChange={(event) => setConfirmPassword(event.target.value)}
+    //         ></input>
+    //         </div>
+    //     </div>
+
+    //     <div className="error-message" id="error-message">
+    //         {errors}
+    //     </div>
+    //     </form>
+
+    //     <div className="button-container">
+    //     <button
+    //         className="btn btn-secondary btn-small"
+    //         onClick={changePasswordClick}
+    //     >
+    //         変更
+    //     </button>
+    //     <button
+    //         type="submit"
+    //         className="btn btn-secondary btn-small"
+    //         form="passwordChangeForm"
+    //         onClick={handleBackSearchClick}
+    //     >
+    //         キャンセル
+    //     </button>
+    //     </div>
+    // </div>
+
+    <div className="body-wrapper01">
+      <div className="container-fluid">
+        <main className="form-signin">
+          <form>
+            <i className="bi bi-unlock-fill" style={{fontSize: "4rem"}}></i>
+            <h1 className="h3 mb-3 fw-normal">パスワードの変更</h1>
+            <div className="form-floating mb-3">
+              <table className="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td className="col-6 text-center align-middle bg-light">現在のパスワード</td>
+                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
+                  </tr>
+                  <tr>
+                    <td className="col-6 text-center align-middle bg-light">新しいパスワード</td>
+                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /><br/>
+                    （半角の英字と数字を含む、８文字以上の文字列）</td>
+                  </tr>
+                  <tr>
+                    <td className="col-6 text-center align-middle bg-light">新しいパスワード（確認）</td>
+                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="error-message" id="error-message">
+                {errors}
+              </div>
+              <div className="my-5">
+                <button className="btn btn-lg btn-primary" 
+                  type="button" onClick={changePasswordClick} style={{ padding: "10px 60px" }}>変&nbsp;更</button>&nbsp;&nbsp;
+                <button className="btn btn-lg btn-secondary" 
+                type="reset" onClick={handleBackSearchClick} style={{ padding: "10px 32px" }}>キャンセル</button>
+              </div>
             </div>
-        </div>
-
-        {/* 新しいパスワード（確認用）入力欄 */}
-        <div className="form-group row">
-            <label
-            htmlFor="confirm-password"
-            className="col-md-6 col-form-label text-md-left"
-            >
-            新しいパスワード（確認用）
-            </label>
-            <div className="col-md-6 input-group">
-            <input
-                type="password"
-                className="form-control string-input"
-                id="confirm-password"
-                name="confirm-password"
-                placeholder="新しいパスワード（確認用）"
-                // value={enteredConfirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-            ></input>
-            </div>
-        </div>
-
-        <div className="error-message" id="error-message">
-            {errors}
-        </div>
-        </form>
-
-        <div className="button-container">
-        <button
-            className="btn btn-secondary btn-small"
-            onClick={changePasswordClick}
-        >
-            変更
-        </button>
-        <button
-            type="submit"
-            className="btn btn-secondary btn-small"
-            form="passwordChangeForm"
-            onClick={handleBackSearchClick}
-        >
-            キャンセル
-        </button>
-        </div>
-    </div>
+          </form>
+        </main>
+      </div>
+      </div>
   );
 }

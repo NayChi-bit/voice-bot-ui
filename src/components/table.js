@@ -1,9 +1,9 @@
 
 import React from "react";
 
-import { useTable, useExpanded } from 'react-table'
+import { useTable, useExpanded, usePagination } from 'react-table'
 import "../pages/styles/globals.css";
-
+import { useMemo } from 'react';
 
 function Table({ columns: columns, data }) {
     const {
@@ -12,17 +12,17 @@ function Table({ columns: columns, data }) {
         headerGroups,
         rows,
         prepareRow,
-        state: { expanded },
+        state: {  },
     } = useTable(
         {
             columns: columns,
             data,
             initialState: {
                 expanded: {},
-              },
+            },
         },
        
-        useExpanded // Use the useExpanded plugin hook
+        useExpanded
     )
 
     // Render the UI for table
@@ -45,16 +45,33 @@ function Table({ columns: columns, data }) {
                             <tr {...row.getRowProps()} key={i}>
                                 {row.cells.map((cell, i) => {
                                     return <td {...cell.getCellProps()} key={i} className="text-center align-middle py-3">
-                                        {cell.column.id === 'operation' ? (
+                                        {/* 部署一覧、担当者一覧 */}
+                                        {cell.column.id === 'operation' ?  (cell.row.original.hasRecord ? (
+                                            cell.row.original.hasSubOrganization ? (
+                                                <div>
+                                                    <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                </div>
+                                            )) : null) : (cell.column.id === 'userDelete' ? (
                                             cell.row.original.hasRecord ? (
-                                            <div>
-                                                <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
-                                                <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
-                                            </div>
-                                            ) : null // Render nothing if there's no record
-                                        ) : (
-                                            cell.render('Cell')
-                                        )}
+                                                    <div>
+                                                        <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>
+                                                    </div>
+                                                ) : null) : (cell.column.id === 'userDetail' ? (
+                                                    cell.row.original.hasRecord ? (
+                                                    <div>
+                                                        <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                    </div>
+                                                    ) : null)  : (cell.column.id === 'download' ? (
+                                                        cell.row.original.hasRecord ? (
+                                                        <div>
+                                                            <a href="#"><i className="bi bi-file-earmark-arrow-down-fill fs-3"></i></a>
+                                                        </div>
+                                                        ) : null) : cell.render('Cell'))))}
                                     </td>
                                 })}
                             </tr>

@@ -12,10 +12,7 @@ const userList = async () => {
         if (response.status !== 200 && response.status !== 423) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      
-        response.map(element => {
-            alert(element);
-        });
+        
         return response;
     }catch (error) {
     console.error("Error posting data:", error);

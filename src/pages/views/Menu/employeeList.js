@@ -1,23 +1,76 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../../components/table";
 import { useRouter } from "next/router";
+import employeeList from "../../api/employee";
 
 export default function ManagerList(){
 
     // router
     const router = useRouter();
-    const [data, setData] = useState([{"name" : null, "readName" : null, "otherName" : null, "department" : null,
+
+    const [data, setData] = useState([{id : null, "name" : null, "readName" : null, "aliasName" : null, "departmentName" : null,
      "phone" : null, "remarks" : null, "operation" : null, hasRecord : false}]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await showList();
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const userAdd = () => {
         router.push("User/userRegister")
+    }
+
+    const showList = async () => {
+        try {
+            const response = await employeeList();
+            // APIの結果が正常だった場合
+            // 部署なし or その他エラー
+            if (response.status == 200 && response !== null) {
+                const res = await response.json();
+
+                const result = processData(res);
+                return result;
+  
+            } else if (response.status == 401) {
+              setErrors("認証の有効期限が切れました");
+              return false;
+            }
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            return false;
+        }  
+    }
+
+    const processData = (data) => {
+        const resultData = [];
+        data.map(row => {
+            const aliasNames = row.employeeAliasList.map(obj => obj.aliasName);
+            const aliasName = aliasNames.join(', ');
+            
+            // レコードあるチャック
+            const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+
+            resultData.push({ ...row, hasRecord, aliasName });
+        });
+
+        return resultData;
     }
 
     const columns = React.useMemo(
         () => [
             {
                 Header: '担当者ID',
-                accessor: 'employeeId',
+                accessor: 'id',
             },
             {
                 Header: '担当者名',
@@ -29,11 +82,11 @@ export default function ManagerList(){
             },
             {
                 Header: '担当者別名',
-                accessor: 'otherName',
+                accessor: 'aliasName',
             },
             {
                 Header: '所属部署',
-                accessor: 'department',
+                accessor: 'departmentName',
             },
             {
                 Header: '電話番号',
@@ -52,108 +105,7 @@ export default function ManagerList(){
         []
     )
 
-    // const data = [
-    //     {
-    //         "userId": "user1",
-    //         "userName": "nay1",
-    //         "reset": "false",
-    //         "lock": "false",
-    //         "subRows": [
-    //             {
-    //                 "userId": "user2",
-    //                 "userName": "nay2",
-    //                 "reset": "false",
-    //                 "lock": "false",
-    //                 "delete": "icon",
-    //                 "detail": "icon",
-    //                 "subRows": [
-    //                     {
-    //                         "userId": "user3",
-    //                         "userName": "nay3",
-    //                         "reset": "false",
-    //                         "lock": "false",
-    //                         "delete": "icon",
-    //                         "detail": "icon",
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "userId": "user4",
-    //                 "userName": "nay4",
-    //                 "reset": "false",
-    //                 "lock": "false",
-    //                 "subRows": [
-    //                     {
-    //                         "userId": "user5",
-    //                         "userName": "nay5",
-    //                         "reset": "false",
-    //                         "lock": "false",
-    //                     }
-    //                 ]
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         "userId": "user1",
-    //         "userName": "nay1",
-    //         "reset": "false",
-    //         "lock": "false",
-    //         "subRows": [
-    //             {
-    //                 "userId": "user2",
-    //                 "userName": "nay2",
-    //                 "reset": "false",
-    //                 "lock": "false",
-    //                 "subRows": [
-    //                     {
-    //                         "userId": "user3",
-    //                         "userName": "nay3",
-    //                         "reset": "false",
-    //                         "lock": "false",
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 "userId": "user4",
-    //                 "userName": "nay4",
-    //                 "reset": "false",
-    //                 "lock": "false",
-    //                 "subRows": [
-    //                     {
-    //                         "userId": "user5",
-    //                         "userName": "nay5",
-    //                         "reset": "false",
-    //                         "lock": "false",
-    //                     }
-    //                 ]
-    //             }
-    //         ]
-    //     }
-
-    // ]
-
     return(
-        // <div className="call-log-viewer-container">
-        //     <h2 className="font-weight-bold">担当者一覧</h2>
-        //     <div className="inner-container">
-        //     <button
-        //           className="btn  btn-outline-dark btn-sm"
-        //           onClick={userAdd}
-        //           style={{ minWidth: "60px" }}
-        //         >追加</button>
-        //     <button
-        //           className="btn  btn-outline-dark btn-sm"
-        //           onClick={userAdd}
-        //           style={{ minWidth: "60px" }}
-        //         >一括管理</button>
-        //     <button
-        //           className="btn  btn-outline-dark btn-sm"
-        //           onClick={userAdd}
-        //           style={{ minWidth: "60px", marginLeft: "auto" }}
-        //         >絞込み</button>
-        //     </div>
-        //     <Table columns={columns} data={data} />
-        // </div>
         <main>
             <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-person-bounding-box"></i>&nbsp;担当者一覧</h1>
             <div className="row mb-3">

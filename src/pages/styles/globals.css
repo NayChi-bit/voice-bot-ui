@@ -124,3 +124,53 @@ button {
   outline: none;
   background: transparent;
 }
+
+/***************************************************/
+/* テーブルページネーション　                        */
+/***************************************************/
+
+.form-control:focus {
+  outline: none; /* フォーカス時のアウトラインを非表示にする */
+  box-shadow: none; /* フォーカス時のボックスシャドウも非表示にする（オプション） */
+  border-color: #dee2e6;
+  }
+  
+  a i.bi.bi-file-earmark-arrow-down-fill {
+  color: #000;
+  }
+  a i.bi.bi-file-earmark-arrow-down-fill:hover {
+  color: #27acd9;
+  }
+  
+  .pagination {
+  display: inline-block;
+  }
+  .pagination a {
+  color: #000;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #eee;
+  margin: 0 4px;
+  background: #eee;
+  }
+  .pagination a:hover {
+  color: #FFF;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #27acd9;
+  margin: 0 4px;
+  background-color: #27acd9;
+  }
+  .pagination a.active {
+  background-color: #27acd9;
+  color: #FFF;
+  border: 1px solid #27acd9;
+  }
+  /* フォーカスが可視状態の時のスタイル */
+  :focus-visible {
+  outline: none;
+  }

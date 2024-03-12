@@ -1,5 +1,5 @@
-const organizationList = async () => {
-    const url = "http://localhost:8080/api/organization/list";
+const callLogList = async (req, res) => {
+    const url = "http://localhost:8080/api/callLog/list";
 
     try{
         const response = await fetch(url, {
@@ -19,4 +19,4 @@ const organizationList = async () => {
   }
 };
 
-export default organizationList;
+export default callLogList;

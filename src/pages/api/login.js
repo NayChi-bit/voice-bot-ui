@@ -13,7 +13,7 @@ const loginAuth = async (formData) => {
         });
 
         console.log(response.status);
-        if (response.status !== 200 && response.status !== 423) {
+        if (response.status !== 200 && response.status !== 423 && response.status !== 400) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
     

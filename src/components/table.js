@@ -3,7 +3,7 @@ import React from "react";
 
 import { useTable, useExpanded, usePagination } from 'react-table'
 import "../pages/styles/globals.css";
-import { useMemo } from 'react';
+import { organizationDelete } from '../pages/views/Menu/organizationList'
 
 function Table({ columns: columns, data }) {
     const {
@@ -24,6 +24,12 @@ function Table({ columns: columns, data }) {
        
         useExpanded
     )
+
+    // 部署削除
+    const orgDelete = (id, event) => {
+        event.stopPropagation();
+        organizationDelete(id);
+    };
 
     // Render the UI for table
     return (
@@ -53,7 +59,7 @@ function Table({ columns: columns, data }) {
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a href="#" onClick={(event) => orgDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
                                                     <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
                                                 </div>
                                             )) : null) : (cell.column.id === 'userDelete' ? (

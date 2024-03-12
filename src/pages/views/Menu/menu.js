@@ -90,7 +90,7 @@ export default function Menu() {
         && !isOrganizationListDialog && !isLogDialog && !isEntityUpdateDialog) && (
           <div className="body-wrapper01">
               <div className="container-fluid">
-              <p className="fs-5">メニューより操作してください。</p>
+              {/* <p className="fs-5">メニューより操作してください。</p> */}
             </div>
           </div>
       )}

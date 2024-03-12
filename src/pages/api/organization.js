@@ -19,4 +19,26 @@ const organizationList = async () => {
   }
 };
 
-export default organizationList;
+const organizationDelete = async (id) => {
+    const url = "http://localhost:8080/api/organization/delete/" + id;
+  
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      return response;
+    } catch (error) {
+      console.error("Error posting data:", error);
+      throw error;
+    }
+};
+
+export const organization = {
+    organizationList, 
+    organizationDelete 
+};
+  

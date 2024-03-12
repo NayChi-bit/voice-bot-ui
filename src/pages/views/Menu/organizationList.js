@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import Table from "../../../components/table";
 import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
-import organization from "../../api/organization";
+import { organization } from "../../api/organization";
+
+let data;
+let setData;
 
 export default function OrganizationList(){
 
     // router
     const router = useRouter();
-    const [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
+    [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
     "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false }]);
-    
+
     const [error, setErrors] = useState("");
 
     //モデル
@@ -37,65 +40,6 @@ export default function OrganizationList(){
 
         fetchData();
     }, []);
-
-    const showList = async () => {
-        try {
-            const response = await organization();
-            // APIの結果が正常だった場合
-            // 部署なし or その他エラー
-            if (response.status == 200 && response !== null) {
-                const res = await response.json();
-
-                const result = processData(res);
-                return result;
-  
-            } else if (response.status == 401) {
-              setErrors("認証の有効期限が切れました");
-              return false;
-            }
-        } catch (errors) {
-            // APIの結果が異常
-            console.debug(errors.status);
-            console.error("エラーerror:", errors);
-            setErrors("エラーが発生しました");
-            return false;
-        }  
-    }
-
-    const processData = (data) => {
-        const parentRows = [];
-        data.map(row => {
-            const aliasNames = row.organizationAliasList.map(obj => obj.aliasName);
-            const aliasName = aliasNames.join(', ');
-            // レコードあるチャック
-            const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
-
-            //上位組織あるチャック
-            if(row.parentDepartmentName !== null){
-
-                //全ての階層にチャック
-                parentRows.forEach((parentRow) => {
-                    if(parentRow.name === row.parentDepartmentName){
-                        parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
-                    }
-                    
-                    if(parentRow.subRows){
-                        parentRow.subRows.forEach(subRow => {
-                            if(subRow.name === row.parentDepartmentName){
-                                subRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
-                            }
-                        })
-                    }
-                });
-                
-            }else{
-                // Add the parent row to the parentRows array
-                parentRows.push({ ...row, subRows: [], hasRecord, aliasName });
-            }
-        });
-
-        return parentRows;
-    }
 
     const userAdd = () => {
         router.push("User/userRegister")
@@ -209,3 +153,83 @@ export default function OrganizationList(){
         </main>
     );
 }
+
+// 部署削除
+export async function organizationDelete(id) {
+    const confirmationMessage = `部署id${id}削除してよろしいですか。？`;
+    console.debug("message:", confirmationMessage);
+    const result = window.confirm(confirmationMessage);
+
+    if (result) {
+        console.debug("User clicked OK");
+        let result = await organization.organizationDelete(id);
+        if (result.status == 401) {
+            router.push("/");
+        } else {
+            const result = await showList();
+            setData(result);
+        }
+    } else {
+        console.debug("User clicked Cancel");
+    }
+};
+
+export const showList = async () => {
+    try {
+        const response = await organization.organizationList();
+        // APIの結果が正常だった場合
+        // 部署なし or その他エラー
+        if (response.status == 200 && response !== null) {
+            const res = await response.json();
+
+            const result = processData(res);
+            return result;
+
+        } else if (response.status == 401) {
+          setErrors("認証の有効期限が切れました");
+          return false;
+        }
+    } catch (errors) {
+        // APIの結果が異常
+        console.debug(errors.status);
+        console.error("エラーerror:", errors);
+        setErrors("エラーが発生しました");
+        return false;
+    }  
+}
+
+export const processData = (data) => {
+    const parentRows = [];
+    data.map(row => {
+        const aliasNames = row.organizationAliasList.map(obj => obj.aliasName);
+        const aliasName = aliasNames.join(', ');
+        // レコードあるチャック
+        const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+
+        //上位組織あるチャック
+        if(row.parentDepartmentName !== null){
+
+            //全ての階層にチャック
+            parentRows.forEach((parentRow) => {
+                if(parentRow.name === row.parentDepartmentName){
+                    parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                }
+                
+                if(parentRow.subRows){
+                    parentRow.subRows.forEach(subRow => {
+                        if(subRow.name === row.parentDepartmentName){
+                            subRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                        }
+                    })
+                }
+            });
+            
+        }else{
+            // Add the parent row to the parentRows array
+            parentRows.push({ ...row, subRows: [], hasRecord, aliasName });
+        }
+    });
+
+    return parentRows;
+}
+

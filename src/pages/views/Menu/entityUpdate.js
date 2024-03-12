@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function EntityUpdate() {
 
@@ -7,18 +7,19 @@ export default function EntityUpdate() {
 
   //Uploadボタン処理
   const onSubmit = async (event) => {
-    //event.preventDefault();
+    event.preventDefault();
     // エラー出力箇所
     var errorMessage = document.getElementById("error-message");
     errorMessage.innerHTML = "";
 
-
     if (!file){
       //ファイルがない場合
       errorMessage.innerHTML = "ファイルを選択してください。";
+      return false;
     } else if(!file.name.endsWith('.csv')){
       //CSV形式がない場合
       errorMessage.innerHTML =  'CSVファイルを選択してください。' ;
+      return false;
     }
 
     try {
@@ -31,18 +32,23 @@ export default function EntityUpdate() {
         body: data
       })
 
+      //データクリア
+      setFile(null);
+      document.getElementById('fileInput').value = '';
+
       // APIの結果が正常だった場合
       if (res.status == 200) {
-        alert("変更しました。");
+        alert("エンティティ更新しました。");
         return false;
       } else {
-        alert("変更に失敗しました。");
+        // APIの結果が異常だった場合
+        alert("エンティティ更新に失敗しました。");
         return false;
       } 
     } catch (error) {
         // APIの結果が異常
         console.error("エラーerror:", error);
-        alert("変更に失敗しました。");
+        alert("エンティティ更新に失敗しました。");
         return false;
     }
   }
@@ -53,8 +59,14 @@ export default function EntityUpdate() {
       <h2>エンティティ更新</h2>
       <div className="mt-5">
         <form onSubmit={onSubmit}> 
-          <input type="file" name="file" onChange={(e) => setFile(e.target.files?.[0])} />
-          <button className="btn btn-lg btn-primary" type="submit" value="Upload" >Upload</button>
+          <div className="row justify-content-center">
+            <div className="col-lg-8 col-md-10">
+            <input class="form-control form-control-lg" id="fileInput" type="file" name="file" onChange={(e) => setFile(e.target.files?.[0])} />
+            </div>
+            <div className="col-lg-2 col-md-2">
+            <button className="btn btn-lg btn-primary" type="submit" value="Upload" >Upload</button>
+            </div>
+          </div>
           <div className="error-message" id="error-message"></div>
         </form>
       </div>

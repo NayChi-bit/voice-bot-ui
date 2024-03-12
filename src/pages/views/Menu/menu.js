@@ -30,6 +30,7 @@ export default function Menu() {
     setShowManagerListDialog(false);
     setShowOrganizationListDialog(false);
     setShowLogDialog(false);
+    setEntityUpdateDialog(false);
   };
 
   //ユーザー管理ボタン押す時
@@ -39,6 +40,7 @@ export default function Menu() {
     setShowManagerListDialog(false);
     setShowOrganizationListDialog(false);
     setShowLogDialog(false);
+    setEntityUpdateDialog(false);
   };
 
    //担当者ー管理ボタン押す時
@@ -48,6 +50,7 @@ export default function Menu() {
     setShowPassChangeDialog(false);
     setShowOrganizationListDialog(false);
     setShowLogDialog(false);
+    setEntityUpdateDialog(false);
   };
 
   //部署ー管理ボタン押す時
@@ -57,6 +60,7 @@ export default function Menu() {
     setShowUserListDialog(false);
     setShowPassChangeDialog(false);
     setShowLogDialog(false);
+    setEntityUpdateDialog(false);
   };
 
   const showLogDialog = (e) => {
@@ -65,15 +69,17 @@ export default function Menu() {
     setShowManagerListDialog(false);
     setShowUserListDialog(false);
     setShowPassChangeDialog(false);
+    setEntityUpdateDialog(false);
   };
 
   //エンティティ更新ボタン押す時
   const showEntityUpdateDialog = (e) => {
     setEntityUpdateDialog(true);
-    setshowOrganizationListDialog(false);
+    setShowOrganizationListDialog(false);
     setShowManagerListDialog(false);
     setShowUserListDialog(false);
     setShowPassChangeDialog(false);
+    setShowLogDialog(false);
   };
 
   return (
@@ -85,6 +91,7 @@ export default function Menu() {
         <a href="#" onClick={showLogDialog}><i className="bi bi-mic-fill"></i>&nbsp;通話ログ管理</a>
         <a href="#" onClick={showUserListDialog}><i className="bi bi-person-fill"></i>&nbsp;ユーザー管理</a>
         <a href="#" onClick={showPassChangeDialog}><i className="bi bi-unlock-fill"></i>&nbsp;パスワード変更</a>
+        <a href="#" onClick={showEntityUpdateDialog}><i className="bi bi-diamond-fill"></i>&nbsp;エンティティ更新</a>
       </div>
       {(!isPassChangeDialog && !isUserListDialog && !isManagerListDialog 
         && !isOrganizationListDialog && !isLogDialog && !isEntityUpdateDialog) && (

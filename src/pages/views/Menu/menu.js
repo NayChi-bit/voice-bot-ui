@@ -8,6 +8,7 @@ import UserList from "./userList";
 import ManagerList from "./employeeList";
 import OrganizationList from "./organizationList";
 import LogList from "./logList";
+import EntityUpdate from "./entityUpdate";
 
 export default function Menu() {
   // environmentsから取得
@@ -18,6 +19,7 @@ export default function Menu() {
   const [isManagerListDialog, setShowManagerListDialog] = useState(false);
   const [isOrganizationListDialog, setShowOrganizationListDialog] = useState(false);
   const [isLogDialog, setShowLogDialog] = useState(false);
+  const [isEntityUpdateDialog, setEntityUpdateDialog] = useState(false);
   // router
   const router = useRouter();
 
@@ -64,6 +66,16 @@ export default function Menu() {
     setShowUserListDialog(false);
     setShowPassChangeDialog(false);
   };
+
+  //エンティティ更新ボタン押す時
+  const showEntityUpdateDialog = (e) => {
+    setEntityUpdateDialog(true);
+    setshowOrganizationListDialog(false);
+    setShowManagerListDialog(false);
+    setShowUserListDialog(false);
+    setShowPassChangeDialog(false);
+  };
+
   return (
     <RootLayout top={!isLoginEnabled}>
       <div className="sidebar">
@@ -75,7 +87,7 @@ export default function Menu() {
         <a href="#" onClick={showPassChangeDialog}><i className="bi bi-unlock-fill"></i>&nbsp;パスワード変更</a>
       </div>
       {(!isPassChangeDialog && !isUserListDialog && !isManagerListDialog 
-        && !isOrganizationListDialog && !isLogDialog) && (
+        && !isOrganizationListDialog && !isLogDialog && !isEntityUpdateDialog) && (
           <div className="body-wrapper01">
               <div className="container-fluid">
               <p className="fs-5">メニューより操作してください。</p>
@@ -117,6 +129,15 @@ export default function Menu() {
         {
           isLogDialog && (
             <LogList></LogList>
+          )
+        }
+        {
+          isEntityUpdateDialog && (
+            <div className="body-wrapper02">
+              <div className="container-fluid">
+                <EntityUpdate></EntityUpdate>
+              </div>
+            </div>
           )
         }
     </RootLayout>

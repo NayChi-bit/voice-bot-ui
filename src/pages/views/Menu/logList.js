@@ -1,5 +1,5 @@
 import RootLayout from "../../../components/main";
-import Table from "../../../components/paginationTable";
+import Table from "../../../components/table";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -114,8 +114,7 @@ export default function Home() {
                             </div>
                         </div>
                     </form>
-
-                    <Table columns={columns} data={data} />
+                    <Table columns={columns} data={data} paginationEnabled={true} />
                 </main>
             </div>
             </div>

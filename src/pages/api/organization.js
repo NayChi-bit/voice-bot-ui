@@ -37,8 +37,27 @@ const organizationDelete = async (id) => {
     }
 };
 
+const organizationDetail = async (id) => {
+    const url = "http://localhost:8080/api/organization/detail/" + id;
+  
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      return response;
+    } catch (error) {
+      console.error("Error posting data:", error);
+      throw error;
+    }
+};
+
 export const organization = {
     organizationList, 
-    organizationDelete 
+    organizationDelete,
+    organizationDetail
 };
   

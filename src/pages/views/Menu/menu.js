@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import LoginPolicy from "../../../environments/config.json";
 
 import RootLayout from "../../../components/main";
 import PasswordChange from "./passwordChange";
@@ -11,17 +10,21 @@ import LogList from "./logList";
 import EntityUpdate from "./entityUpdate";
 
 export default function Menu() {
-  // environmentsから取得
-  const isLoginEnabled = LoginPolicy.system.policy.login;
-  
+  // router
+  const router = useRouter();
+
+  const title = "部署・担当者管理システム";
+  const [userName, setUserName] = useState("");
   const [isPassChangeDialog, setShowPassChangeDialog] = useState(false);
   const [isUserListDialog, setShowUserListDialog] = useState(false);
   const [isManagerListDialog, setShowManagerListDialog] = useState(false);
   const [isOrganizationListDialog, setShowOrganizationListDialog] = useState(false);
   const [isLogDialog, setShowLogDialog] = useState(false);
   const [isEntityUpdateDialog, setEntityUpdateDialog] = useState(false);
-  // router
-  const router = useRouter();
+
+  useEffect(() => {
+    setUserName(sessionStorage.getItem("userName"));
+  })
 
   //パスワード変更ボタン押す時
   const showPassChangeDialog = (e) => {
@@ -31,6 +34,8 @@ export default function Menu() {
     setShowOrganizationListDialog(false);
     setShowLogDialog(false);
     setEntityUpdateDialog(false);
+
+    //useRouter.push
   };
 
   //ユーザー管理ボタン押す時
@@ -83,7 +88,7 @@ export default function Menu() {
   };
 
   return (
-    <RootLayout top={!isLoginEnabled}>
+    <RootLayout>
       <div className="sidebar">
         <h1><i className="bi bi-list"></i>&nbsp;メニュー</h1>
         <a href="#" onClick={showOrganizationListDialog}><i className="bi bi-building-fill"></i>&nbsp;組織管理</a>

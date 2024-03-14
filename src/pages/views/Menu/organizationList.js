@@ -3,6 +3,7 @@ import Table from "../../../components/table";
 import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
+import Link from "next/link";
 
 let data;
 let setData;
@@ -18,8 +19,10 @@ export default function OrganizationList(){
 
     //モデル
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const openModal = (e) => {
+    const [show, setShow]=useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const openModal = (event) => {
+        event.stopPropagation();
         setIsModalOpen(true);
     };
 
@@ -130,49 +133,16 @@ export default function OrganizationList(){
                     <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
                 </div>
                 <div className="col-6 text-end">
-                    <button type="button" onClick={openModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
+                    <button type="button" onClick={ (event) => openModal(event)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
+                    <Modal onClose={() => setShowModal(false)} show={isModalOpen}></Modal>
+                    {/* <button type='button' onClick={() => setShowModal(true)} className="btn btn-primary"  style={{ padding: "10px 40px" }}>絞り込み表示</button>
+                    <Modal onClose={() => setShowModal(false)} show={showModal}></Modal> */}
                 </div>
-                
             </div>
             <Table columns={columns} data={data} />
-
-            {/* <Modal isOpen={isModalOpen} onClose={closeModal}> */}
-                {/* モーダルの設定  */}
-                {isModalOpen && (
-                    <div className="modal-overlay">
-                    <div className="modal">
-                        <button className="modal-close" onClick={closeModal}>X</button>
-                        <div className="modal-content">
-                        <h2>Hello, this is a modal</h2>
-                        <p>This is a modal dialog created in Next.js</p>
-                        </div>
-                    </div>
-                    </div>
-                )}
-            {/* </Modal> */}
         </main>
     );
 }
-
-// 部署削除
-export async function organizationDelete(id) {
-    const confirmationMessage = `部署id${id}削除してよろしいですか。？`;
-    console.debug("message:", confirmationMessage);
-    const result = window.confirm(confirmationMessage);
-
-    if (result) {
-        console.debug("User clicked OK");
-        let result = await organization.organizationDelete(id);
-        if (result.status == 401) {
-            router.push("/");
-        } else {
-            const result = await showList();
-            setData(result);
-        }
-    } else {
-        console.debug("User clicked Cancel");
-    }
-};
 
 export const showList = async () => {
     try {
@@ -232,4 +202,25 @@ export const processData = (data) => {
 
     return parentRows;
 }
+
+// 部署削除
+export async function organizationDelete(id, router) {
+    const confirmationMessage = `削除しますか？`;
+    console.debug("message:", confirmationMessage);
+    const result = window.confirm(confirmationMessage);
+
+    if (result) {
+        console.debug("User clicked OK");
+        let result = await organization.organizationDelete(id);
+        if (result.status == 401) {
+            router.push("/");
+        } else {
+            const result = await showList();
+            setData(result);
+        }
+    } else {
+        console.debug("User clicked Cancel");
+    }
+};
+
 

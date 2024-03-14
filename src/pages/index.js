@@ -6,7 +6,6 @@ import LoginAuth from "../pages/api/login";
 import { useRouter } from "next/navigation";
 import LoginPolicy from "../environments/config.json";
 import Cookies from "js-cookie";
-
 export default function Home() {
   // environmentsから取得
   const isLoginEnabled = LoginPolicy.system.policy.login;
@@ -118,7 +117,6 @@ export default function Home() {
   };
   return (
     <RootLayout top={true}>
-      {isLoginEnabled && (
         <div className="container text-center signin">
           <main className="form-signin">
             <form method="post" onSubmit={handleSubmit}>
@@ -167,7 +165,6 @@ export default function Home() {
             </form>
           </main>
         </div>
-      )}
     </RootLayout>
   );
 }

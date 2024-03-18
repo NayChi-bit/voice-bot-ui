@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import LoginPolicy from "../environments/config.json";
 import Cookies from "js-cookie";
 export default function Home() {
-  // environmentsから取得
-  const isLoginEnabled = LoginPolicy.system.policy.login;
+ 
   // router
   const router = useRouter();
 
@@ -116,11 +115,11 @@ export default function Home() {
     }
   };
   return (
-    <RootLayout top={true}>
+    <RootLayout top={true} isSidebarInclude={false}>
         <div className="container text-center signin">
           <main className="form-signin">
             <form method="post" onSubmit={handleSubmit}>
-              <i className="bi bi-person-square"  style={{fontSize: "4rem"}}></i>
+              <i className="bi bi-person-square" style={{fontSize: "4rem"}}></i>
               <h1 className="h3 mb-3 fw-normal">システムへのログイン</h1>
               <div className="error-message" id="error-message"></div>
               <div className="form-floating mb-3">

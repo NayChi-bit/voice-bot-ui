@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import RootLayout from "../../../components/main";
 import LoginPolicy from "../../../environments/config.json";
 
 export default function PasswordChange() {
@@ -333,44 +334,45 @@ export default function PasswordChange() {
     //     </button>
     //     </div>
     // </div>
-
-    <div className="body-wrapper01">
-      <div className="container-fluid">
-        <main className="form-signin">
-          <form>
-            <i className="bi bi-unlock-fill" style={{fontSize: "4rem"}}></i>
-            <h1 className="h3 mb-3 fw-normal">パスワードの変更</h1>
-            <div className="form-floating mb-3">
-              <table className="table table-bordered">
-                <tbody>
-                  <tr>
-                    <td className="col-6 text-center align-middle bg-light">現在のパスワード</td>
-                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
-                  </tr>
-                  <tr>
-                    <td className="col-6 text-center align-middle bg-light">新しいパスワード</td>
-                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /><br/>
-                    （半角の英字と数字を含む、８文字以上の文字列）</td>
-                  </tr>
-                  <tr>
-                    <td className="col-6 text-center align-middle bg-light">新しいパスワード（確認）</td>
-                    <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="error-message" id="error-message">
-                {errors}
+    <RootLayout top={true} isSidebarInclude={true}>
+      <div className="body-wrapper01">
+        <div className="container-fluid">
+          <main className="form-signin">
+            <form>
+              <i className="bi bi-unlock-fill" style={{fontSize: "4rem"}}></i>
+              <h1 className="h3 mb-3 fw-normal">パスワードの変更</h1>
+              <div className="form-floating mb-3">
+                <table className="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <td className="col-6 text-center align-middle bg-light">現在のパスワード</td>
+                      <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
+                    </tr>
+                    <tr>
+                      <td className="col-6 text-center align-middle bg-light">新しいパスワード</td>
+                      <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /><br/>
+                      （半角の英字と数字を含む、８文字以上の文字列）</td>
+                    </tr>
+                    <tr>
+                      <td className="col-6 text-center align-middle bg-light">新しいパスワード（確認）</td>
+                      <td className="col-6 text-center align-middle"><input type="password" className="custom-input" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="error-message" id="error-message">
+                  {errors}
+                </div>
+                <div className="my-5">
+                  <button className="btn btn-lg btn-primary" 
+                    type="button" onClick={changePasswordClick} style={{ padding: "10px 60px" }}>変&nbsp;更</button>&nbsp;&nbsp;
+                  <button className="btn btn-lg btn-secondary" 
+                  type="reset" onClick={handleBackSearchClick} style={{ padding: "10px 32px" }}>キャンセル</button>
+                </div>
               </div>
-              <div className="my-5">
-                <button className="btn btn-lg btn-primary" 
-                  type="button" onClick={changePasswordClick} style={{ padding: "10px 60px" }}>変&nbsp;更</button>&nbsp;&nbsp;
-                <button className="btn btn-lg btn-secondary" 
-                type="reset" onClick={handleBackSearchClick} style={{ padding: "10px 32px" }}>キャンセル</button>
-              </div>
-            </div>
-          </form>
-        </main>
+            </form>
+          </main>
+        </div>
       </div>
-      </div>
+    </RootLayout>
   );
 }

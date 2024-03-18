@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
+import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
-import Link from "next/link";
 
 let data;
 let setData;
-
 export default function OrganizationList(){
 
     // router
     const router = useRouter();
     [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
-    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false }]);
+    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false, isOrg : true }]);
 
     const [error, setErrors] = useState("");
 
     //モデル
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [show, setShow]=useState(false);
-    const [showModal, setShowModal] = useState(false);
     const openModal = (event) => {
         event.stopPropagation();
         setIsModalOpen(true);
@@ -44,8 +41,8 @@ export default function OrganizationList(){
         fetchData();
     }, []);
 
-    const userAdd = () => {
-        router.push("User/userRegister")
+    const add = () => {
+        router.push("./register")
     }
 
     const columns = React.useMemo(
@@ -125,22 +122,28 @@ export default function OrganizationList(){
     )
 
     return(
-        <main>
-            <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-diagram-3-fill"></i>&nbsp;部署一覧</h1>
-            <div className="row mb-3">
-                <div className="col-6 text-start">
-                    <button type="button" className="btn btn-danger" style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
-                    <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
-                </div>
-                <div className="col-6 text-end">
-                    <button type="button" onClick={ (event) => openModal(event)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
-                    <Modal onClose={() => setShowModal(false)} show={isModalOpen}></Modal>
-                    {/* <button type='button' onClick={() => setShowModal(true)} className="btn btn-primary"  style={{ padding: "10px 40px" }}>絞り込み表示</button>
-                    <Modal onClose={() => setShowModal(false)} show={showModal}></Modal> */}
+        <RootLayout top={true} isSidebarInclude={true}>
+            <div className="body-wrapper02">
+                <div className="container-fluid">
+                    <main>
+                        <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-diagram-3-fill"></i>&nbsp;部署一覧</h1>
+                        <div className="row mb-3">
+                            <div className="col-6 text-start">
+                                <button type="button" className="btn btn-danger" onClick={add} style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
+                                <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
+                            </div>
+                            <div className="col-6 text-end">
+                                <button type="button" onClick={ (event) => openModal(event)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
+                                <Modal onClose={() => setShowModal(false)} show={isModalOpen}></Modal>
+                                {/* <button type='button' onClick={() => setShowModal(true)} className="btn btn-primary"  style={{ padding: "10px 40px" }}>絞り込み表示</button>
+                                <Modal onClose={() => setShowModal(false)} show={showModal}></Modal> */}
+                            </div>
+                        </div>
+                        <Table columns={columns} data={data} />
+                    </main>
                 </div>
             </div>
-            <Table columns={columns} data={data} />
-        </main>
+        </RootLayout>
     );
 }
 
@@ -175,6 +178,7 @@ export const processData = (data) => {
         const aliasName = aliasNames.join(', ');
         // レコードあるチャック
         const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+        const isOrg = true;
 
         //上位組織あるチャック
         if(row.parentDepartmentName !== null){
@@ -182,13 +186,13 @@ export const processData = (data) => {
             //全ての階層にチャック
             parentRows.forEach((parentRow) => {
                 if(parentRow.name === row.parentDepartmentName){
-                    parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                    parentRow.subRows.push({...row, subRows: [], hasRecord, aliasName, isOrg });
                 }
                 
                 if(parentRow.subRows){
                     parentRow.subRows.forEach(subRow => {
                         if(subRow.name === row.parentDepartmentName){
-                            subRow.subRows.push({...row, subRows: [], hasRecord, aliasName});
+                            subRow.subRows.push({...row, subRows: [], hasRecord, aliasName, isOrg });
                         }
                     })
                 }
@@ -196,10 +200,9 @@ export const processData = (data) => {
             
         }else{
             // Add the parent row to the parentRows array
-            parentRows.push({ ...row, subRows: [], hasRecord, aliasName });
+            parentRows.push({ ...row, subRows: [], hasRecord, aliasName, isOrg });
         }
     });
-
     return parentRows;
 }
 

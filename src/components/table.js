@@ -3,12 +3,12 @@ import React from "react";
 
 import { useTable, useExpanded, usePagination } from 'react-table'
 import { useRouter } from "next/router";
-import { organizationDelete } from '../pages/views/Menu/organizationList'
-import { organizationDetail } from '../pages/views/Organization/detail'
+import { organizationDelete } from "@/pages/views/Organization/list";
+import { employeeDelete  } from "@/pages/views/Employee/list";
 import { useMemo } from 'react';
-import { event } from "jquery";
 
 import "../pages/styles/globals.css";
+import { employee } from "@/pages/api/employee";
 
 const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = false}) => {
     const router = useRouter();
@@ -43,18 +43,29 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
         paginationEnabled ? usePagination : (hooks) => { hooks.skipPageReset = true; }
     )
 
-    // 部署削除
-    const orgDelete = (id, event) => {
+    // 部署||担当者削除
+    const deleteOpr = (id, event, isOrg) => {
         event.stopPropagation();
-        organizationDelete(id, router);
+        isOrg ? organizationDelete(id, router) : employeeDelete(id, router);
     };
 
-    // 部署詳細
-    const  orgDetail = async (id, event) => {
-        //alert(id);
+    // 部署||担当者詳細
+    const  detailOpr = async (id, event, isOrg) => {
         event.stopPropagation();
-        sessionStorage.setItem("organizationId", id);
-        router.push('../Organization/detail');
+        if(isOrg){
+            sessionStorage.setItem("organizationId", id);
+            router.push('../Organization/detail');
+        }
+
+        sessionStorage.setItem("employeeId", id);
+        router.push('../Employee/detail');
+    }
+    
+    // ユーザー詳細
+    const  userDetail = async (id, event) => {
+        event.stopPropagation();
+        sessionStorage.setItem("userId", id);
+        router.push('../User/detail');
     }
 
     // Calculate canPreviousPage manually
@@ -137,22 +148,22 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                                 {cell.column.id === 'operation' ?  (cell.row.original.hasRecord ? (
                                                     cell.row.original.hasSubOrganization ? (
                                                         <div>
-                                                            <a href="#" onClick={(event) => orgDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                            <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}>{cell.row.original.isOrg}<i className="bi bi-sticky-fill fs-4"></i></a>
                                                         </div>
                                                     ) : (
                                                         <div>
-                                                            <a href="#" onClick={(event) => orgDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>&nbsp;&nbsp;&nbsp;
-                                                            <a href="#" onClick={(event) => orgDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                            <a href="#" onClick={(event) => deleteOpr(cell.row.original.id, event, cell.row.original.isOrg)}><i className="bi bi-trash-fill fs-4"></i>{cell.row.original.isOrg}</a>&nbsp;&nbsp;&nbsp;
+                                                            <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}><i className="bi bi-sticky-fill fs-4">{cell.row.original.isOrg}</i></a>
                                                         </div>
                                                     )) : null) : (cell.column.id === 'userDelete' ? (
                                                     cell.row.original.hasRecord ? (
                                                             <div>
-                                                                <a href="#"><i className="bi bi-trash-fill fs-4"></i></a>
+                                                                <a href="#" onClick={(event) => userDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>
                                                             </div>
                                                         ) : null) : (cell.column.id === 'userDetail' ? (
                                                             cell.row.original.hasRecord ? (
                                                             <div>
-                                                                <a href="#"><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                                <a href="#" onClick={(event) => userDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
                                                             </div>
                                                             ) : null)  : (cell.column.id === 'download' ? (
                                                                 cell.row.original.hasRecord ? (

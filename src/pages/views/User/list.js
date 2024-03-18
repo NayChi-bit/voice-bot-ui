@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import { useRouter } from "next/router";
-import userList from "../../api/user";
+
+import { systemUser } from "../../api/user";
 
 
 export default function UserList(){
 
     // router
     const router = useRouter();
+
     const [data, setData] = useState([{"userId" : null, "name" : null, "isPassReset" : null, "isLock" : null, 
     "userDelete" : null, "userDetail" : null, hasRecord : false }]);
     const [error, setErrors] = useState("");
@@ -27,7 +30,7 @@ export default function UserList(){
     
     const showList = async () => {
         try {
-            const response = await userList();
+            const response = await systemUser.userList();
             // APIの結果が正常だった場合
             // 部署なし or その他エラー
             if (response.status == 200 && response !== null) {
@@ -62,9 +65,12 @@ export default function UserList(){
         return resultData;
     }
 
-    const userAdd = () => {
-        router.push("../User/userRegister")
-    }
+    //新規登録ボタン押す時
+    const userAdd = (e) => {
+        //router.push("/userRegister");
+        e.preventDefault();
+        router.push("./register");
+    };
     
     const columns =  [
         {
@@ -94,18 +100,24 @@ export default function UserList(){
     ];
 
     return(
-        <main>
-            <div className="row mb-2">
-                <div className="col-6">
-                    <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-person-lines-fill"></i>&nbsp;ユーザー一覧</h1>
-                </div>
-                <div className="col-6 text-end">
-                    <a href="">
-                        <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>新規登録</button>
-                    </a>
+        <RootLayout top={true} isSidebarInclude={true}>
+            <div className="body-wrapper02">
+                <div className="container-fluid">
+                    <main>
+                        <div className="row mb-2">
+                            <div className="col-6">
+                                <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-person-lines-fill"></i>&nbsp;ユーザー一覧</h1>
+                            </div>
+                            <div className="col-6 text-end">
+                                <a href="">
+                                    <button type="button" onClick={userAdd} className="btn btn-primary" style={{ padding: "10px 40px" }}>新規登録</button>
+                                </a>
+                            </div>
+                        </div>
+                        <Table columns={columns} data={data} />
+                    </main>
                 </div>
             </div>
-            <Table columns={columns} data={data} />
-        </main>
+        </RootLayout>
     );
 }

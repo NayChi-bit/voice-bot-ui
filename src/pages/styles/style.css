@@ -53,13 +53,13 @@ margin-left: 240px;
 display: flex;
 align-items: center;
 justify-content: center;
-height: 100vh;
+height: 100%;
 padding-top: 64px;
 }
 
 .body-wrapper02 {
 margin-left: 240px;
-height: 100vh;
+height: 100%;
 padding-top: 100px;
 }
 

@@ -83,7 +83,7 @@ export default function Home() {
     ];
 
     return (
-        <RootLayout top={true}>
+        <RootLayout top={true} isSidebarInclude={true}>
         <div className="body-wrapper02">
             <div className="container-fluid">
                 <main>

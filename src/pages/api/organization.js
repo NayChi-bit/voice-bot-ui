@@ -55,9 +55,51 @@ const organizationDetail = async (id) => {
     }
 };
 
+
+const organizationCreate = async (formData) => {
+  const url = "http://localhost:8080/api/organization/add";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    throw error;
+  }
+};
+
+const parentOrgList = async (level) => {
+  const url = "http://localhost:8080/api/organization/parentOrgList/" + level;
+
+  try{
+      const response = await fetch(url, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+
+      if (response.status !== 200) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response;
+  }catch (error) {
+  console.error("Error posting data:", error);
+  throw error;
+}
+};
 export const organization = {
     organizationList, 
     organizationDelete,
-    organizationDetail
+    organizationDetail,
+    organizationCreate,
+    parentOrgList
 };
   

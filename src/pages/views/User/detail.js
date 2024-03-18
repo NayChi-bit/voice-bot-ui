@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import Modal from "../../../components/modal";
-import { useRouter } from "next/router";
-import { organization } from "../../api/organization";
+import { Router, useRouter } from "next/router";
+import { systemUser } from "../../api/user";
 
 export default function organizationDetail(){
 
     // router
     const router = useRouter();
-    
-    const [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
-    "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false }]);
+
+    const [data, setData] = useState([{"userId" : null, "name" : null, "isPassReset" : null, "isLock" : null, 
+    "userDelete" : null, "userDetail" : null, hasRecord : false }]);
 
     const [error, setErrors] = useState("");
 
     useEffect(() => {
-        const id = sessionStorage.getItem('organizationId');
+        const id = sessionStorage.getItem('userId');
         const fetchData = async () => {
             try {
                 const response = await showDetail(id);
@@ -37,7 +37,7 @@ export default function organizationDetail(){
 
     const showDetail = async (id) => {
         try {
-            const response = await organization.organizationDetail(id);
+            const response = await systemUser.userDetail(id);
             // APIの結果が正常だった場合
             // 部署なし or その他エラー
             if (response.status == 200 && response !== null) {
@@ -45,79 +45,49 @@ export default function organizationDetail(){
 
                 const result = processData(res);
                 return result;
-
-            } else {
-                return false;
+  
+            } else if (response.status == 401) {
+              setErrors("認証の有効期限が切れました");
+              return false;
             }
         } catch (errors) {
             // APIの結果が異常
             console.debug(errors.status);
             console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
             return false;
         }  
     }
 
     const processData = (data) => {
         const resultData = [];
-        
-        const aliasNames = data.organizationAliasList.map(obj => obj.aliasName);
-        const aliasName = aliasNames.join(', ');
+            
+        // レコードあるチャック
+        const hasRecord = data.hasOwnProperty('id') && data.id !== null; 
 
-        resultData.push({ ...data, aliasName });
-       
+        resultData.push({ ...data, hasRecord });
+
         return resultData;
     }
 
-    const columns = React.useMemo(
-        () => [
-            {
-                id: 'id',
-                Header: '部署ID',
-                accessor: 'id',
-            },
-            {
-                id: 'departmentId',
-                Header: '部署コード',
-                accessor: 'departmentId',
-            },
-            {
-                id: 'name',
-                Header: '部署名',
-                accessor: 'name',
-            },
-            {
-                id: 'readName',
-                Header: 'よみ',
-                accessor: 'readName',
-            },
-            {
-                id: 'level',
-                Header: '階層',
-                accessor: 'level',
-            },
-            {
-                id: 'parentDepartmentName',
-                Header: '上位組織',
-                accessor: 'parentDepartmentName',
-            },
-            {
-                id: 'aliasName',
-                Header: '別名',
-                accessor: 'aliasName',
-            },
-            {
-                id: 'ph',
-                Header: '電話番号',
-                accessor: 'phone',
-            },
-            {
-                id: 'remarks',
-                Header: '備考',
-                accessor: 'remarks',
-            }
-        ],
-        []
-    )
+    const columns =  [
+        {
+            Header: 'ユーザID',
+            accessor: 'userId',
+        },
+        {
+            Header: 'ユーザ名',
+            accessor: 'name',
+        },
+        {
+            Header: 'リセット',
+            accessor: 'isPassReset',
+        },
+        {
+            Header: 'ロック',
+            accessor: 'isLock',
+        }
+    ];
 
     return(
         <RootLayout>
@@ -126,7 +96,7 @@ export default function organizationDetail(){
                     <main className="form-signin">
                         <form>
                             <i className="bi bi-diagram-3-fill" style={{fontSize: "4rem"}}></i>
-                            <h1 className="h3 mb-3 fw-normal">部署詳細</h1>
+                            <h1 className="h3 mb-3 fw-normal">ユーザー詳細</h1>
                             <div className="form-floating mb-3">
                                 <Table columns={columns} data={data} paginationEnabled={false} isVarticleTable={true}/>
                                 <div className="my-5">

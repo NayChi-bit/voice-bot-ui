@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RootLayout from "../../../components/main";
 
 export default function EntityUpdate() {
 
@@ -54,23 +55,30 @@ export default function EntityUpdate() {
   }
   
   return (
-    <main>
-      <div>
-      <h2>エンティティ更新</h2>
-      <div className="mt-5">
-        <form onSubmit={onSubmit}> 
-          <div className="row justify-content-center">
-            <div className="col-lg-8 col-md-10">
-            <input class="form-control form-control-lg" id="fileInput" type="file" name="file" onChange={(e) => setFile(e.target.files?.[0])} />
-            </div>
-            <div className="col-lg-2 col-md-2">
-            <button className="btn btn-lg btn-primary" type="submit" value="Upload" >Upload</button>
-            </div>
-          </div>
-          <div className="error-message" id="error-message"></div>
-        </form>
+    <RootLayout top={true} isSidebarInclude={true}>
+      <div className="body-wrapper02">
+        <div className="container-fluid">
+          <main>
+            <div>
+              <h2>エンティティ更新</h2>
+              <div className="mt-5">
+                <form onSubmit={onSubmit}> 
+                  <div className="row justify-content-center">
+                    <div className="col-lg-8 col-md-10">
+                    <input className="form-control form-control-lg" id="fileInput" type="file" name="file" onChange={(e) => setFile(e.target.files?.[0])} />
+                    </div>
+                    <div className="col-lg-2 col-md-2">
+                    <button className="btn btn-lg btn-primary" type="submit" value="Upload" >Upload</button>
+                    </div>
+                  </div>
+                  <div className="error-message" id="error-message"></div>
+                </form>
+              </div>
+            </div>          
+          </main>
+        </div>
       </div>
-      </div>
-    </main>
+     
+    </RootLayout>
   );
 }

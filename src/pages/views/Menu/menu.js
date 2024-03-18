@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import RootLayout from "../../../components/main";
-import PasswordChange from "./passwordChange";
-import UserList from "./userList";
-import ManagerList from "./employeeList";
-import OrganizationList from "./organizationList";
-import LogList from "./logList";
-import EntityUpdate from "./entityUpdate";
+
 
 export default function Menu() {
   // router
@@ -89,69 +84,7 @@ export default function Menu() {
 
   return (
     <RootLayout>
-      <div className="sidebar">
-        <h1><i className="bi bi-list"></i>&nbsp;メニュー</h1>
-        <a href="#" onClick={showOrganizationListDialog}><i className="bi bi-building-fill"></i>&nbsp;組織管理</a>
-        <a href="#" onClick={showManagerListDialog}><i className="bi bi-person-workspace"></i>&nbsp;担当者管理</a>
-        <a href="#" onClick={showLogDialog}><i className="bi bi-mic-fill"></i>&nbsp;通話ログ管理</a>
-        <a href="#" onClick={showUserListDialog}><i className="bi bi-person-fill"></i>&nbsp;ユーザー管理</a>
-        <a href="#" onClick={showPassChangeDialog}><i className="bi bi-unlock-fill"></i>&nbsp;パスワード変更</a>
-        <a href="#" onClick={showEntityUpdateDialog}><i className="bi bi-diamond-fill"></i>&nbsp;エンティティ更新</a>
-      </div>
-      {(!isPassChangeDialog && !isUserListDialog && !isManagerListDialog 
-        && !isOrganizationListDialog && !isLogDialog && !isEntityUpdateDialog) && (
-          <div className="body-wrapper01">
-              <div className="container-fluid">
-              {/* <p className="fs-5">メニューより操作してください。</p> */}
-            </div>
-          </div>
-      )}
-        {
-          isPassChangeDialog && (
-            <PasswordChange></PasswordChange>
-          )
-        }
-        {
-          isUserListDialog && (
-            <div className="body-wrapper02">
-              <div className="container-fluid">
-                <UserList></UserList>
-              </div>
-            </div>
-          )
-        }
-        {
-          isManagerListDialog && (
-            <div className="body-wrapper02">
-              <div className="container-fluid">
-              <ManagerList></ManagerList>
-              </div>
-            </div>
-          )
-        }
-        {
-          isOrganizationListDialog && (
-            <div className="body-wrapper02">
-              <div className="container-fluid">
-                <OrganizationList></OrganizationList>
-              </div>
-            </div>
-          )
-        }
-        {
-          isLogDialog && (
-            <LogList></LogList>
-          )
-        }
-        {
-          isEntityUpdateDialog && (
-            <div className="body-wrapper02">
-              <div className="container-fluid">
-                <EntityUpdate></EntityUpdate>
-              </div>
-            </div>
-          )
-        }
+      
     </RootLayout>
   );
 }

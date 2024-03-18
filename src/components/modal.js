@@ -1,5 +1,3 @@
-
-
 const Modal = ({ show, onClose }) => {
 
     const handleCloseClick = (e) => {

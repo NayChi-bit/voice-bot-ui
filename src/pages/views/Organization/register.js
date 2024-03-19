@@ -23,8 +23,15 @@ export default function UserRegister(){
         if (selectedValue !== '') {
             getParentOrgOpt(selectedValue);
         }
-        setSelectedValueLevel("1");
+        setSelectedValueLevel(selectedValue);
     }, [selectedValue]);// This useEffect will run whenever level changes
+
+    useEffect(() => {
+        setSelectedValueLevel('1');
+        setFormData({
+            level:'1'
+        })
+    }, []);// This useEffect will run only once
 
     //別名＋ボタン押す
     const handleAddField = () => {
@@ -46,8 +53,9 @@ export default function UserRegister(){
         [name]: value,
         }));
 
-        //level dropdown set
-        setSelectedValueLevel(e.target.value);
+        if(name == "level"){
+            setSelectedValueLevel(e.target.value);
+        }
     };
 
     const handleChangeReadName = (index = null) => (e) => {
@@ -61,7 +69,7 @@ export default function UserRegister(){
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
-                aliasNames : newInputFields,
+                organizationAliasNameList : newInputFields,
             }));
         }
     };
@@ -72,12 +80,6 @@ export default function UserRegister(){
         // エラー出力箇所
         var errorMessage = document.getElementById("error-message");
     
-        // const aliasNameArr = formData.aliasNames.split(',').map((item) => item.trim());
-        // setFormData({
-        //     ...formData,
-        //     organizationAliasList : aliasNameArr
-        // });
-        // alert(JSON.stringify(formData));
         if (validateForm()) {
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
@@ -111,7 +113,7 @@ export default function UserRegister(){
         }
 
         //上位組織チャック
-        if(formData.level !== 1 && (formData.parentDepartmentName === null || !formData.parentDepartmentName)){
+        if(selectedValue !== '1' && (formData.parentDepartmentName === null || !formData.parentDepartmentName)){
             setErrors("上位組織を選択してください。");
             return false;
         }
@@ -134,11 +136,9 @@ export default function UserRegister(){
     const registOrg = async (formData) => {
         try {
           const response = await organization.organizationCreate(formData);
-          console.debug(response);
-  
           if (response.status == 409) {
-            alert(response.body);
-            alert("既に同じ部署コードが存在しています。");
+            const result = await response.json();
+            alert(JSON.stringify(result.body));
           } 
           else if (response.status == 401) {
             router.push("/");
@@ -166,7 +166,7 @@ export default function UserRegister(){
           上位組織:${formData.parentDepartmentName}
           電話番号:${formData.name}
           備 考:${formData.name}
-          別名：${formData.aliasNames}
+          別名：${formData.organizationAliasNameList}
         `;
 
         return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);

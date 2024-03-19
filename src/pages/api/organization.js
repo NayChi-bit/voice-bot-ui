@@ -86,7 +86,7 @@ const parentOrgList = async (level) => {
           },
       });
 
-      if (response.status !== 200) {
+      if (response.status !== 200 || response.status !== 400) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response;

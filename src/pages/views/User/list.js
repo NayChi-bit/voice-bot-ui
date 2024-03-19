@@ -5,13 +5,14 @@ import { useRouter } from "next/router";
 
 import { systemUser } from "../../api/user";
 
-
+let data;
+let setData;
 export default function UserList(){
 
     // router
     const router = useRouter();
 
-    const [data, setData] = useState([{"userId" : null, "name" : null, "isPassReset" : null, "isLock" : null, 
+    [data, setData] = useState([{"userId" : null, "name" : null, "isPassReset" : null, "isLock" : null, 
     "userDelete" : null, "userDetail" : null, hasRecord : false }]);
     const [error, setErrors] = useState("");
 
@@ -27,43 +28,6 @@ export default function UserList(){
 
         fetchData();
     }, []);
-    
-    const showList = async () => {
-        try {
-            const response = await systemUser.userList();
-            // APIの結果が正常だった場合
-            // 部署なし or その他エラー
-            if (response.status == 200 && response !== null) {
-                const res = await response.json();
-
-                const result = processData(res);
-                return result;
-  
-            } else if (response.status == 401) {
-              setErrors("認証の有効期限が切れました");
-              return false;
-            }
-        } catch (errors) {
-            // APIの結果が異常
-            console.debug(errors.status);
-            console.error("エラーerror:", errors);
-            setErrors("エラーが発生しました");
-            return false;
-        }  
-    }
-
-    const processData = (data) => {
-        const resultData = [];
-        data.map(row => {
-            
-            // レコードあるチャック
-            const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
-
-            resultData.push({ ...row, hasRecord });
-        });
-
-        return resultData;
-    }
 
     //新規登録ボタン押す時
     const userAdd = (e) => {
@@ -121,3 +85,60 @@ export default function UserList(){
         </RootLayout>
     );
 }
+
+export const showList = async () => {
+    try {
+        const response = await systemUser.userList();
+        // APIの結果が正常だった場合
+        // 部署なし or その他エラー
+        if (response.status == 200 && response !== null) {
+            const res = await response.json();
+
+            const result = processData(res);
+            return result;
+
+        } else if (response.status == 401) {
+          setErrors("認証の有効期限が切れました");
+          return false;
+        }
+    } catch (errors) {
+        // APIの結果が異常
+        console.debug(errors.status);
+        console.error("エラーerror:", errors);
+        setErrors("エラーが発生しました");
+        return false;
+    }  
+}
+
+export const processData = (data) => {
+    const resultData = [];
+    data.map(row => {
+        
+        // レコードあるチャック
+        const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+
+        resultData.push({ ...row, hasRecord });
+    });
+
+    return resultData;
+}
+
+// ユーザー削除
+export async function userDelete(id, router) {
+    const confirmationMessage = `削除しますか？`;
+    console.debug("message:", confirmationMessage);
+    const result = window.confirm(confirmationMessage);
+
+    if (result) {
+        console.debug("User clicked OK");
+        let result = await systemUser.userDelete(id);
+        if (result.status == 401) {
+            router.push("/");
+        } else {
+            const result = await showList();
+            setData(result);
+        }
+    } else {
+        console.debug("User clicked Cancel");
+    }
+};

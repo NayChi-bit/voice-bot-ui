@@ -57,8 +57,27 @@ const userCreate = async (formData) => {
   }
 };
 
+const userDelete = async (id) => {
+  const url = "http://localhost:8080/api/user/delete/" + id;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    throw error;
+  }
+};
+
 export const systemUser = {
     userList, 
     userDetail,
-    userCreate
+    userCreate,
+    userDelete
 };

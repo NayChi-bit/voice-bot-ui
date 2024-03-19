@@ -5,6 +5,7 @@ import { useTable, useExpanded, usePagination } from 'react-table'
 import { useRouter } from "next/router";
 import { organizationDelete } from "@/pages/views/Organization/list";
 import { employeeDelete  } from "@/pages/views/Employee/list";
+import { userDelete  } from "@/pages/views/User/list";
 import { useMemo } from 'react';
 
 import "../pages/styles/globals.css";
@@ -47,6 +48,12 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
     const deleteOpr = (id, event, isOrg) => {
         event.stopPropagation();
         isOrg ? organizationDelete(id, router) : employeeDelete(id, router);
+    };
+
+    //ユーザー削除
+    const systemUserDelete = (id, event) => {
+        event.stopPropagation();
+        userDelete(id, router);
     };
 
     // 部署||担当者詳細
@@ -158,7 +165,7 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                                     )) : null) : (cell.column.id === 'userDelete' ? (
                                                     cell.row.original.hasRecord ? (
                                                             <div>
-                                                                <a href="#" onClick={(event) => userDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>
+                                                                <a href="#" onClick={(event) => systemUserDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>
                                                             </div>
                                                         ) : null) : (cell.column.id === 'userDetail' ? (
                                                             cell.row.original.hasRecord ? (

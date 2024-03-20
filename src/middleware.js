@@ -17,9 +17,6 @@ import Cookies from "js-cookie";
       const response = NextResponse.redirect(new URL("/", request.url));
       return response;
     }
-    // else if(currentUser){
-    //   return Response.redirect(new URL('/views/Menu/menu', request.url))
-    // }
 }
  
 export const config = {

@@ -101,7 +101,9 @@ export default function organizationDetail(){
                                 <Table columns={columns} data={data} paginationEnabled={false} isVarticleTable={true}/>
                                 <div className="my-5">
                                     <button type="button" className="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{padding :"10px 60px"}}>編&nbsp;集</button>&nbsp;&nbsp;
-                                    <button className="btn btn-lg btn-secondary" type="button" onClick={handleBack} style={{padding :"10px 60px"}}>戻&nbsp;る</button>
+                                    <button className="btn btn-lg btn-secondary" type="button" onClick={handleBack} style={{padding :"10px 60px"}}>戻&nbsp;る</button>&nbsp;&nbsp;
+                                    <button className="btn btn-lg btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Modal02" style={{padding :"10px 60px"}}>パスワードリセット</button>&nbsp;&nbsp;
+                                    <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal03	" style={{padding :"10px 60px"}}>アカウントロック</button>
                                 </div>
                             </div>
                         </form>

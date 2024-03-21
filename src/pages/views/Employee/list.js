@@ -27,9 +27,9 @@ export default function ManagerList(){
         fetchData();
     }, []);
 
-    // const userAdd = () => {
-    //     router.push("User/userRegister")
-    // }
+    const employeeAdd = () => {
+        router.push("./register");
+    }
 
     const columns = React.useMemo(
         () => [
@@ -78,7 +78,7 @@ export default function ManagerList(){
                         <h1 className="h3 mb-3 fw-normal text-start"><i className="bi bi-person-bounding-box"></i>&nbsp;担当者一覧</h1>
                         <div className="row mb-3">
                             <div className="col-6 text-start">
-                                <button type="button" className="btn btn-danger" style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
+                                <button type="button" className="btn btn-danger" onClick={employeeAdd} style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
                                 <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
                             </div>
                             <div className="col-6 text-end">

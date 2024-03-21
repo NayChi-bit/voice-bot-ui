@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import { useRouter } from "next/router";
-import { organization } from "../../api/organization";
+import { employee } from "../../api/employee";
+import { organization } from "@/pages/api/organization";
 
-export default function organizationRegister(){
+export default function EmployeeRegister(){
     // router
     const router = useRouter();
 
@@ -12,26 +13,16 @@ export default function organizationRegister(){
 
     const [formData, setFormData] = useState({});
     //parent organization dropdwon
-    const [options, setParentOrgOpt] = useState([]);
-    //level dropdown
-    const [selectedValue, setSelectedValueLevel] = useState('');
+    const [options, setOrganizationOpt] = useState([]);
+    
     //別名テキスト追加削除
     const [inputFields, setInputFields] = useState(['']);
 
     useEffect(() => {
-        if (selectedValue !== '') {
-            getParentOrgOpt(selectedValue);
-        }
-        setSelectedValueLevel(selectedValue);
-    }, [selectedValue]);// This useEffect will run whenever level changes
+        getOrganizations();
+    }, []);// This useEffect will run whenever level changes
 
-    useEffect(() => {
-        setSelectedValueLevel('1');
-        setFormData({
-            level:'1'
-        })
-    }, []);// This useEffect will run only once
-
+    
     //別名＋ボタン押す
     const handleAddField = () => {
         setInputFields([...inputFields, '']); // Add a new empty input field
@@ -51,10 +42,6 @@ export default function organizationRegister(){
         ...prevData,
         [name]: value,
         }));
-
-        if(name == "level"){
-            setSelectedValueLevel(e.target.value);
-        }
     };
 
     //別名dropdown
@@ -69,7 +56,7 @@ export default function organizationRegister(){
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
-                organizationAliasNameList : newInputFields,
+                employeeAliasNameList : newInputFields,
             }));
         }
     };
@@ -84,7 +71,7 @@ export default function organizationRegister(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            registOrg(formData);
+            registEmployee(formData);
         } else {
           console.log("Error Data:", error)
         }
@@ -92,29 +79,15 @@ export default function organizationRegister(){
     
     // validation
     const validateForm = () => {
-        //部署名の検証
-        const departmentIdIdRegex = /[^a-zA-Z0-9]/;
-        if (!formData.departmentId || !formData.departmentId.trim()) {
-            setErrors("部署IDを入力してください");
-            return false;
-        } else if (departmentIdIdRegex.test(formData.departmentId)) {
-            setErrors("部署IDが正しくありません。使用できない文字が含まれています。");
-            return false;
-        } 
-        // else if (formData.departmentId.length < depIdMin || depIdMax < formData.departmentId.length) {
-        //     setErrors("部署IDは" + depIdMin + "文字以上、" + depIdMax + "以下で設定してください。");
-        //     return false;
-        // }
-
         // 部署名チャック
         if (!formData.name || !formData.name.trim()) {
-            setErrors("部署名を入力してください");
+            setErrors("担当者名を入力してください。");
             return false;
         }
 
         //上位組織チャック
-        if(selectedValue !== '1' && (formData.parentDepartmentName === null || !formData.parentDepartmentName)){
-            setErrors("上位組織を選択してください。");
+        if(formData.departmentId === null || !formData.departmentId){
+            setErrors("所属部署名を選択してください。");
             return false;
         }
 
@@ -133,9 +106,9 @@ export default function organizationRegister(){
         return true;
     };
 
-    const registOrg = async (formData) => {
+    const registEmployee = async (formData) => {
         try {
-          const response = await organization.organizationCreate(formData);
+          const response = await employee.employeeCreate(formData);
           if (response.status == 409) {
             const result = await response.json();
             alert(JSON.stringify(result.body));
@@ -143,7 +116,7 @@ export default function organizationRegister(){
           else if (response.status == 401) {
             router.push("/");
           } else if (response.status == 200) {
-            alert("部署の登録は完了しました。");
+            alert("担当者の登録は完了しました。");
             router.push("./list");
           } else {
             alert("登録に失敗しました");
@@ -159,31 +132,29 @@ export default function organizationRegister(){
       
     function showConfirmation(formData) {
         var confirmationMessage = `
-          部署ID: ${formData.departmentId}
-          部署名: ${formData.name}
+          担当者名: ${formData.name}
           よみ:${formData.readName}
-          階 層:${formData.level}
-          上位組織:${formData.parentDepartmentName}
+          所属部署 :${formData.departmentId}
           電話番号:${formData.phone}
           備 考:${formData.remarks}
-          別名：${formData.organizationAliasNameList}
+          担当者別名：${formData.employeeAliasNameList}
         `;
 
         return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
     }
 
-    const getParentOrgOpt = async (level) => {
+    const getOrganizations = async () => {
         try {
-          const response = await organization.parentOrgList(level);
+          const response = await organization.organizationList();
           console.debug(response);
   
           if (response.status == 200) {
             const data = await response.json();
             const dropdownOptions = data.map(item => ({
-                value: item.name,
+                value: item.id,
                 label: item.name
               }));
-              setParentOrgOpt(dropdownOptions);
+              setOrganizationOpt(dropdownOptions);
           } else {
             return false;
           }
@@ -207,17 +178,13 @@ export default function organizationRegister(){
                     <div>
                         <form method="post" onSubmit={handleSubmit}>
                             <i className="bi bi-diagram-3-fill" style={{fontSize: "4rem"}}></i>
-                            <h1 className="h3 mb-3 fw-normal">部署追加</h1>
+                            <h1 className="h3 mb-3 fw-normal">担当者追加</h1>
                             <div className="error-message" id="error-message">{error}</div>
                             <div className="form-floating mb-3">
                                 <table className="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td className="col-6 text-center align-middle bg-light py-4">部署コード</td>
-                                            <td className="col-6 text-center align-middle"><input type="text" className="custom-input" name="departmentId" value={formData.departmentId} onChange={(e) => handleChange(e)}  /></td>
-                                        </tr>
-                                        <tr>
-                                            <td className="col-6 text-center align-middle bg-light py-4">部署名</td>
+                                            <td className="col-6 text-center align-middle bg-light py-4">担当者名</td>
                                             <td className="col-6 text-center align-middle"><input type="text" className="custom-input" name="name" value={formData.name} onChange={(e) => handleChange(e)}  /></td>
                                         </tr>
                                         <tr>
@@ -225,23 +192,11 @@ export default function organizationRegister(){
                                             <td className="col-6 text-center align-middle"><input type="text" className="custom-input" name="readName" value={formData.readName} onChange={(e) => handleChange(e)} /></td>
                                         </tr>
                                         <tr>
-                                            <td className="col-6 text-center align-middle bg-light py-4">階&nbsp;層</td>
+                                            <td className="col-6 text-center align-middle bg-light py-4">所属部署</td>
                                             <td className="col-6 text-center align-middle py-4">
                                                 <div className="d-flex justify-content-center align-items-center">
-                                                    <select name="level" value={formData.level} onChange={(e) => handleChange(e)} className="form-select" id="Select01" aria-label="Default select" style={{width:"347px", height: "50px"}}>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                    </select>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="col-6 text-center align-middle bg-light py-4">上位組織</td>
-                                            <td className="col-6 text-center align-middle py-4">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <select name="parentDepartmentName" value={formData.parentDepartmentName} onChange={(e) => handleChange(e)} className="form-select" id="Select02" aria-label="Default select" style={{width:"347px", height: "50px"}}>
-                                                        <option value="">上位組織を選択してください</option>
+                                                    <select name="departmentId" value={formData.departmentId} onChange={(e) => handleChange(e)} className="form-select" id="Select02" aria-label="Default select" style={{width:"347px", height: "50px"}}>
+                                                        <option value="">部署一覧から選択</option>
                                                         {options.map(option => (
                                                             <option key={option.value} value={option.value}>
                                                             {option.label}
@@ -252,7 +207,7 @@ export default function organizationRegister(){
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="col-6 text-center align-middle bg-light py-4">別&nbsp;名</td>
+                                            <td className="col-6 text-center align-middle bg-light py-4">担当者別名</td>
                                             <td className="col-6 text-center align-middle py-4" style={{position: "relative"}}>
                                                 {inputFields.map((input, index) => (
                                                     <div key={index}>
@@ -260,7 +215,7 @@ export default function organizationRegister(){
                                                         { index !== 0 && (
                                                             <i className="bi bi-dash-circle-fill btn-danger" onClick={() => handleRemoveField(index)} style={{fontSize: "2.6rem", position: "absolute", top: "15px", color: "#dc3545"}}></i>
                                                         )}
-                                                        {/* <input key={index} type="text" name="readName" value={formData.readName} onChange={(e) => handleChange(index)} /> */}
+                                                        
                                                         { index === inputFields.length - 1 && (
                                                             <i className="bi bi-plus-circle-fill" onClick={handleAddField} style={{fontSize: "2.6rem", position: "absolute", top: "80px"}}></i>
                                                         )} 
@@ -270,7 +225,7 @@ export default function organizationRegister(){
                                         </tr>
                                         <tr>
                                             <td className="col-6 text-center align-middle bg-light py-4">電話番号</td>
-                                            <td className="col-6 text-center align-middle"><input type="text" className="custom-input" name="phone" value={formData.phone} onChange={(e) => handleChange(e)}  /></td>
+                                            <td className="col-6 text-center align-middle"><input type="tel" className="custom-input" name="phone" value={formData.phone} onChange={(e) => handleChange(e)}  /></td>
                                         </tr>
                                         <tr>
                                             <td className="col-6 text-center align-middle bg-light py-4">備&nbsp;考</td>

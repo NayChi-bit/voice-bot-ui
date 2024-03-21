@@ -159,6 +159,13 @@ export default function UserRegister(){
         if (/[<>+!?#$%&()\/~*]/.test(password)) charTypes++; //登録可能な記号は<>+!?#$%&()/~*のみ
         return charTypes;
     }
+
+    // 戻るボタン押す
+    const handleBack = (e) => {
+        e.preventDefault();
+        router.push("./list");
+    }
+
     return(
         <RootLayout top={true} isSidebarInclude={true}>
             <div className="body-wrapper01">
@@ -192,7 +199,7 @@ export default function UserRegister(){
                                 </table>
                                 <div className="my-5">
                                     <button className="btn btn-lg btn-primary" type="submit" style={{padding :"10px 60px"}}>登&nbsp;録</button>&nbsp;&nbsp;
-                                    <button className="btn btn-lg btn-secondary" type="reset"  style={{padding :"10px 32px"}}>キャンセル</button>
+                                    <button className="btn btn-lg btn-secondary" type="reset"  style={{padding :"10px 32px"}} onClick={handleBack}>キャンセル</button>
                                 </div>
                             </div>
                         </main>

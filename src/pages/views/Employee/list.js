@@ -31,6 +31,11 @@ export default function ManagerList(){
         router.push("./register");
     }
 
+     //新規登録
+     const addBatch = () => {
+        router.push("./batch_process")
+    }
+
     const columns = React.useMemo(
         () => [
             {
@@ -79,7 +84,7 @@ export default function ManagerList(){
                         <div className="row mb-3">
                             <div className="col-6 text-start">
                                 <button type="button" className="btn btn-danger" onClick={employeeAdd} style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
-                                <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
+                                <button type="button" className="btn btn-primary" onClick={addBatch} style={{ padding: "10px 40px" }}>一括処理</button>
                             </div>
                             <div className="col-6 text-end">
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>

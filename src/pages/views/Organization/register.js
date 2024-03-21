@@ -274,7 +274,7 @@ export default function organizationRegister(){
                                         </tr>
                                         <tr>
                                             <td className="col-6 text-center align-middle bg-light py-4">備&nbsp;考</td>
-                                            <td className="col-6 text-center align-middle"><input type="text" className="custom-input" name="remarks" value={formData.remarks} onChange={(e) => handleChange(e)}  /></td>
+                                            <td className="col-6 text-center align-middle"><input type="tel" className="custom-input" name="remarks" value={formData.remarks} onChange={(e) => handleChange(e)}  /></td>
                                         </tr>
                                     </tbody>
                                 </table>

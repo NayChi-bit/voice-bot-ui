@@ -86,16 +86,19 @@ export default function Home() {
             const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
             Cookies.set("expireTime", oneHourLater, { secure: true, sameSite: 'none' });
           }
-          Cookies.set("currentUser", data.userId, { secure: true, sameSite: 'none' });
 
-          if (!data.isPassReset) {
-            sessionStorage.setItem("userId", data.userId);
-            sessionStorage.setItem("userName", data.userName);
-            router.push("views/Menu/menu");
-          } else {
-            sessionStorage.setItem("userId", data.userId);
-            sessionStorage.setItem("userName", data.userName);
-            router.push("views/Menu/changePassword");
+          if(data){
+            Cookies.set("currentUser", data.userId, { secure: true, sameSite: 'none' });
+
+            if (!data.isPassReset) {
+              sessionStorage.setItem("userId", data.userId);
+              sessionStorage.setItem("userName", data.userName);
+              router.push("views/Menu/menu");
+            } else {
+              sessionStorage.setItem("userId", data.userId);
+              sessionStorage.setItem("userName", data.userName);
+              router.push("views/Menu/changePassword");
+            }
           }
         })
         

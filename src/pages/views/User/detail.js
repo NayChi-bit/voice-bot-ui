@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
-import Modal from "../../../components/modal";
 import { Router, useRouter } from "next/router";
 import { systemUser } from "../../api/user";
 

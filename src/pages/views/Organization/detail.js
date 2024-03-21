@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
-import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
 
@@ -135,6 +134,64 @@ export default function organizationDetail(){
                                 </div>
                             </div>
                         </form>
+                        {
+                            <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h1 className="modal-title fs-5" id="ModalLabel01">部署詳細編&nbsp;集</h1>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <table className="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">部署ID</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].id} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">部署コード</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].departmentId} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">部署名</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].name} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">よみ</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].readName} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">階層</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].level} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">上位組織</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].parentDepartmentName} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">別名</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].organizationAliasList?.map((item) => item.aliasName).join(', ') || ''}/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">電話番号</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].phone} /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className="col-6 text-center align-middle bg-light py-3">備考</td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].remarks} /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}}>編&nbsp;集</button>
+                                                <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
+                                            </div>{/* /.modal-footer  */}
+                                        </div>
+                                    </div>{/* /.modal-content  */}
+                                </div>{/* /.modal-dialog  */}
+                            </div>
+                        }
                     </main>
                 </div>
             </div>

@@ -62,10 +62,10 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
         if(isOrg){
             sessionStorage.setItem("organizationId", id);
             router.push('../Organization/detail');
+        } else {
+            sessionStorage.setItem("employeeId", id);
+            router.push('../Employee/detail');
         }
-
-        sessionStorage.setItem("employeeId", id);
-        router.push('../Employee/detail');
     }
     
     // ユーザー詳細

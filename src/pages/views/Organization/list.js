@@ -40,6 +40,11 @@ export default function OrganizationList(){
         router.push("./register")
     }
 
+      //部署一括処理
+      const addBatch = () => {
+        router.push("./batch_process")
+    }
+
     //モデル閉じる
     const handleCloseClick = (e) => {
         e.preventDefault();
@@ -131,7 +136,7 @@ export default function OrganizationList(){
                         <div className="row mb-3">
                             <div className="col-6 text-start">
                                 <button type="button" className="btn btn-danger" onClick={add} style={{ padding: "10px 40px" }}>追&nbsp;加</button>&nbsp;
-                                <button type="button" className="btn btn-primary" style={{ padding: "10px 40px" }}>一括処理</button>
+                                <button type="button" className="btn btn-primary" onClick={addBatch} style={{ padding: "10px 40px" }}>一括処理</button>
                             </div>
                             <div className="col-6 text-end">
                                 <button type="button" onClick={ (event) => openModal(event)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;

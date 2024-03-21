@@ -31,7 +31,7 @@ export default function ManagerList(){
         router.push("./register");
     }
 
-     //新規登録
+    //担当者一括処理
      const addBatch = () => {
         router.push("./batch_process")
     }

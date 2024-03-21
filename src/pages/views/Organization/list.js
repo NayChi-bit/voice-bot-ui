@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
-import Modal from "../../../components/modal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
 
@@ -21,11 +20,6 @@ export default function OrganizationList(){
     const openModal = (event) => {
         event.stopPropagation();
         setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        alert("close modal");
-        setIsModalOpen(false);
     };
 
     useEffect(() => {
@@ -141,7 +135,6 @@ export default function OrganizationList(){
                             </div>
                             <div className="col-6 text-end">
                                 <button type="button" onClick={ (event) => openModal(event)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
-                                {/* <Modal onClose={() => setShowModal(false)} show={isModalOpen}></Modal> */}
                                 {
                                     isModalOpen && (
                                         <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
@@ -150,8 +143,6 @@ export default function OrganizationList(){
                                                     <div className="modal-header">
                                                         <h1 className="modal-title fs-5" id="ModalLabel01">部署絞り込み</h1>
                                                         <button type="button" onClick={handleCloseClick} className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-                                                        
-                                                        {/* <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style="--bs-btn-padding-y: 10px; --bs-btn-padding-x: 40px;">絞り込み表示</button>&nbsp; */}
                                                     </div>
                                                     <div className="modal-body">
                                                         <table className="table table-bordered">

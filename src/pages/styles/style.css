@@ -241,6 +241,13 @@ outline: none;
 background: transparent;
 }
 
+/* ------------------------------------------------
+   日時ピッカーのCSS
+------------------------------------------------ */
+.react-datepicker__input-container>input {
+   height: 46px;
+}
+
 
 
 

@@ -2,6 +2,8 @@ import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import callLogList from "../../api/callLog";
 
@@ -82,6 +84,17 @@ export default function Home() {
         },
     ];
 
+    const [selectedStartDate, setSelectedStartDate] = useState(null);
+    const [selectedEndDate, setSelectedEndDate] = useState(null);
+
+    const handleStartDateChange = (date) => {
+        setSelectedStartDate(date);
+    };
+
+    const handleEndDateChange = (date) => {
+        setSelectedEndDate(date);
+    };
+      
     return (
         <RootLayout top={true} isSidebarInclude={true}>
         <div className="body-wrapper02">
@@ -98,8 +111,12 @@ export default function Home() {
                     <form>
                         <div className="row mb-3">
                             <div className="col text-start">
-                                <label htmlFor="period">期間</label>
-                                <input type="text" className="form-control" id="period" style={{height: "46px"}} />
+                                <label htmlFor="start-date">開始日</label>
+                                <DatePicker className="form-control" dateFormat="yyyy/MM/dd" selected={selectedStartDate} onChange={handleStartDateChange}/>
+                            </div>
+                            <div className="col text-start">
+                                <label htmlFor="end-date">終了日</label>
+                                <DatePicker className="form-control" dateFormat="yyyy/MM/dd" selected={selectedEndDate} onChange={handleEndDateChange}/>
                             </div>
                             <div className="col text-start">
                                 <label htmlFor="department">部署名</label>

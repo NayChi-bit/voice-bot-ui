@@ -176,6 +176,10 @@ background: #f6f9ff;
 border-radius: 6px;
 }
 
+.edit-input {
+   width: 80% !important;
+}
+
 .custom-input:focus {
 color: var(--bs-body-color);
 background-color: var(--bs-body-bg);
@@ -248,7 +252,12 @@ background: transparent;
    height: 46px;
 }
 
-
+/* ------------------------------------------------
+   モーダルダイアログボックスのCSS
+------------------------------------------------ */
+.editModal {
+   --bs-modal-width: 580px !important;
+}
 
 
 

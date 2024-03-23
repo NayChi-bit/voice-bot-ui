@@ -3,6 +3,7 @@ import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import { useRouter } from "next/router";
 import { employee } from "../../api/employee";
+import { organization } from "@/pages/api/organization";
 
 export default function organizationDetail(){
 
@@ -14,12 +15,24 @@ export default function organizationDetail(){
      
     const [error, setErrors] = useState("");
 
+    // edit form data
+    const [formData, setFormData] = useState({});
+
+    // parent organization dropdwon
+    const [options, setOrganizationOpt] = useState([]);
+
+    // 別名テキスト追加削除
+    const [inputFields, setInputFields] = useState([]);
+
     useEffect(() => {
         const id = sessionStorage.getItem('employeeId');
         const fetchData = async () => {
             try {
                 const response = await showDetail(id);
                 setData(response);
+                setFormData(response[0]);
+                setInputFields(response[0].employeeAliasList.map(item => item.aliasName));
+                getOrganizations();
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -27,6 +40,147 @@ export default function organizationDetail(){
 
         fetchData();
     }, []);
+
+    // 別名＋ボタン押す
+    const handleAddField = () => {
+        setInputFields([...inputFields, '']); // Add a new empty input field
+    };
+
+    // 別名ーボタン押
+    const handleRemoveField = (index) => {
+        const newInputFields = [...inputFields];
+        newInputFields.splice(index, 1); // Remove the input field at the specified index
+        setInputFields(newInputFields);
+    };
+
+    const handleChange = (e) => {
+        // 値変更時のformData設定
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        }));
+    };
+
+    // 別名dropdown
+    const handleChangeReadName = (index = null) => (e) => {
+        // 値変更時のformData設定
+        const { name, value } = e.target;
+        if (index !== null) {
+            //別名fields set
+            const newInputFields = [...inputFields];
+            newInputFields[index] = e.target.value; // Update the value of the input field at the specified index
+            setInputFields(newInputFields);
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+                employeeAliasNameList : newInputFields,
+            }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // エラー出力箇所
+        var errorMessage = document.getElementById("error-message");
+    
+        if (validateForm()) {
+            console.debug("Form Data:", formData);
+            errorMessage.innerHTML = "";
+            
+            registEmployee(formData);
+        } else {
+          console.log("Error Data:", error)
+        }
+    };
+
+    // validation
+    const validateForm = () => {
+        // 部署名チャック
+        if (!formData.name || !formData.name.trim()) {
+            setErrors("担当者名を入力してください。");
+            return false;
+        }
+
+        // 上位組織チャック
+        if(formData.departmentName === null || !formData.departmentName){
+            setErrors("所属部署名を選択してください。");
+            return false;
+        }
+
+        // 電話番号チャック
+        const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
+        if (!phoneNumberRegex.test(formData.phone)) {
+            setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
+            return false;
+        }
+
+        var confirmed = showConfirmation(formData);
+        if (!confirmed) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const registEmployee = async (formData) => {
+        try {
+          const response = await employee.employeeEdit(formData);
+          if (response.status == 409) {
+            const result = await response.json();
+            alert(JSON.stringify(result.body));
+          } 
+          else if (response.status == 401) {
+            router.push("/");
+          } else if (response.status == 200) {
+            alert("担当者の登録は完了しました。");
+            router.push("./list");
+          } else {
+            alert("登録に失敗しました");
+            return false;
+          }
+        } catch (error) {
+          // APIの結果が異常
+          console.log("エラーerror:", error);
+          alert("登録に失敗しました");
+          return false;
+        }
+    };
+
+    function showConfirmation(formData) {
+        var confirmationMessage = `
+          担当者名: ${formData.name}
+          よみ:${formData.readName}
+          所属部署 :${formData.departmentName}
+          電話番号:${formData.phone}
+          備 考:${formData.remarks}
+          担当者別名：${formData.employeeAliasNameList}
+        `;
+
+        return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
+    }
+
+    const getOrganizations = async () => {
+        try {
+          const response = await organization.organizationList();
+          console.debug(response);
+  
+          if (response.status == 200) {
+            const data = await response.json();
+            const dropdownOptions = data.map(item => ({
+                value: item.id,
+                label: item.name
+              }));
+              setOrganizationOpt(dropdownOptions);
+          } else {
+            return false;
+          }
+        } catch (error) {
+          // APIの結果が異常
+          console.log("エラーerror:", error);
+          return false;
+        }
+    };
 
     // 戻るボタン押す
     const handleBack = (e) => {
@@ -60,11 +214,12 @@ export default function organizationDetail(){
         
         const aliasNames = data.employeeAliasList.map(obj => obj.aliasName);
         const aliasName = aliasNames.join(', ');
+        const employeeAliasNameList = aliasNames.join(', ');
         
         // レコードあるチャック
         const hasRecord = data.hasOwnProperty('id') && data.id !== null; 
 
-        resultData.push({ ...data, hasRecord, aliasName });
+        resultData.push({ ...data, hasRecord, aliasName, employeeAliasNameList });
 
         return resultData;
     }
@@ -120,48 +275,68 @@ export default function organizationDetail(){
                             </div>
                         </form>
                         {
-                            <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
+                            <div className="modal fade editModal" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h1 className="modal-title fs-5" id="ModalLabel01">担当者詳細&nbsp;集</h1>
+                                            <h1 className="modal-title fs-5" id="ModalLabel01">担当者詳細編集</h1>
                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                                         </div>
                                         <div className="modal-body">
+                                            <div className="error-message" id="error-message" style={{marginBottom :"15px"}}>{error}</div>
                                             <table className="table table-bordered">
                                                 <tbody>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">担当者ID</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].id} /></td>
+                                                        <td className="text-center align-middle bg-light py-3">担当者名</td>
+                                                        <td className="text-center align-middle py-3"><input type="text" className="custom-input edit-input" name="name" value={formData.name} onChange={(e) => handleChange(e)} /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">担当者名</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].name} /></td>
+                                                        <td className="text-center align-middle bg-light py-3">よみ</td>
+                                                        <td className="text-center align-middle py-3"><input type="text" className="custom-input edit-input" name="readName" value={formData.readName} onChange={(e) => handleChange(e)} /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">よみ</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].readName} /></td>
+                                                        <td className="text-center align-middle bg-light py-3">担当者別名</td>
+                                                        <td className="text-center align-middle py-3" style={{position: "relative"}}>
+                                                            { inputFields.map((input, index) => (
+                                                                <div key={index} className="icon-btn">
+                                                                    <input key={index} type="text" name={`input_${index}`} value={input} onChange={(e) => handleChangeReadName(index)(e)} className="custom-input edit-input mb-3 me-2" />
+                                                                    { inputFields.length > 1 && (
+                                                                        <i className="bi bi-dash-circle-fill btn-danger" onClick={() => handleRemoveField(index)} style={{fontSize: "2.6rem", position: "absolute", top: `${10 + index * 65}px`,  right: "5px", color: "#dc3545"}}></i>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                            { inputFields.length < 5 && (
+                                                                <i className="bi bi-plus-circle-fill" onClick={handleAddField} style={{fontSize: "2.6rem", position: "absolute", top: `${inputFields.length === 1 ? 67 : 10 + inputFields.length * 63}px`, right: "5px"}}></i>
+                                                            )}
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">担当者別名</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].employeeAliasList?.map((item) => item.aliasName).join(', ') || ''} /></td>
+                                                        <td className="text-center align-middle bg-light py-3">所属部署</td>
+                                                        <td className="text-center align-middle py-3">
+                                                            <div className="d-flex justify-content-center align-items-center">
+                                                                <select name="departmentId" value={formData.departmentId} onChange={(e) => handleChange(e)} className="form-select" id="Select02" aria-label="Default select" style={{width:"325px", height: "50px"}}>
+                                                                    <option value="">部署一覧から選択</option>
+                                                                    {options.map(option => (
+                                                                        <option key={option.value} value={option.value}>
+                                                                        {option.label}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">所属部署</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].departmentName} /></td>
+                                                        <td className="text-center align-middle bg-light py-3">電話番号</td>
+                                                        <td className="text-center align-middle py-3"><input type="text" name="phone" className="custom-input edit-input" value={formData.phone} onChange={(e) => handleChange(e)} /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">電話番号</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].phone} /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">備考</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].remarks}/></td>
+                                                        <td className="text-center align-middle bg-light py-3">備考</td>
+                                                        <td className="text-center align-middle py-3"><input type="text" name="remarks" className="custom-input edit-input" value={formData.remarks} onChange={(e) => handleChange(e)} /></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}}>編&nbsp;集</button>
+                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}} onClick={handleSubmit} >編&nbsp;集</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>

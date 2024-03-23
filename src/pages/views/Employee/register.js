@@ -211,16 +211,15 @@ export default function EmployeeRegister(){
                                             <td className="col-6 text-center align-middle py-4" style={{position: "relative"}}>
                                                 {inputFields.map((input, index) => (
                                                     <div key={index}>
-                                                        <input key={index} type="text" name={`input_${index}`} value={formData.aliasName} onChange={(e) => handleChangeReadName(index)(e)} className="custom-input mb-3 me-2" />
-                                                        { index !== 0 && (
-                                                            <i className="bi bi-dash-circle-fill btn-danger" onClick={() => handleRemoveField(index)} style={{fontSize: "2.6rem", position: "absolute", top: "15px", color: "#dc3545"}}></i>
+                                                        <input key={index} type="text" name={`input_${index}`} value={input} onChange={(e) => handleChangeReadName(index)(e)} className="custom-input mb-3 me-2" />
+                                                        { inputFields.length > 1 && (
+                                                            <i className="bi bi-dash-circle-fill btn-danger" onClick={() => handleRemoveField(index)} style={{fontSize: "2.6rem", position: "absolute", top: `${15 + index * 65}px`,  right: "45px", color: "#dc3545"}}></i>
                                                         )}
-                                                        
-                                                        { index === inputFields.length - 1 && (
-                                                            <i className="bi bi-plus-circle-fill" onClick={handleAddField} style={{fontSize: "2.6rem", position: "absolute", top: "80px"}}></i>
-                                                        )} 
                                                     </div>
                                                 ))}
+                                                { inputFields.length < 5 && (
+                                                    <i className="bi bi-plus-circle-fill" onClick={handleAddField} style={{fontSize: "2.6rem", position: "absolute", top: `${inputFields.length === 1 ? 80 : 15 + inputFields.length * 65}px`, right: "45px"}}></i>
+                                                )}
                                             </td>
                                         </tr>
                                         <tr>

@@ -48,8 +48,8 @@ export default function organizationRegister(){
         // 値変更時のformData設定
         const { name, value } = e.target;
         setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
+            ...prevData,
+            [name]: value,
         }));
 
         if(name == "level"){
@@ -178,6 +178,7 @@ export default function organizationRegister(){
           console.debug(response);
   
           if (response.status == 200) {
+            alert("call parent org api");
             const data = await response.json();
             const dropdownOptions = data.map(item => ({
                 value: item.name,

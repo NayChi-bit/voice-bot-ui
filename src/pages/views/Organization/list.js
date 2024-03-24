@@ -6,14 +6,17 @@ import { organization } from "../../api/organization";
 
 let data;
 let setData;
+let setErrors;
+let errors;
+
 export default function OrganizationList(){
 
     // router
     const router = useRouter();
     [data, setData] = useState([{"name" : null, "readName" : null, "id" : null, "departmentId" : null, 
     "level" : null,  "parentDepartmentName" : null, "aliasName" : null, "phone" : null, "remarks" : null, "operation" : null, hasRecord : false, hasSubOrganization : false, isOrg : true }]);
-
-    const [error, setErrors] = useState("");
+    [errors, setErrors] = useState("");
+    const [formData, setFormData] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -114,6 +117,51 @@ export default function OrganizationList(){
         []
     )
 
+    const handleChange = (e) => {
+        // 値変更時のformData設定
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleFilter = async (e) => {
+        try {
+            alert(JSON.stringify(formData));
+            const response = await organization.organizationList(formData);
+            // APIの結果が正常だった場合
+            // 部署なし or その他エラー
+            if (response.status == 200 && response !== null) {
+                const resultData = [];
+                const isOrg = true;
+                const res = await response.json();
+
+                res.map(row => {
+                    const aliasNames = row.organizationAliasList.map(obj => obj.aliasName);
+                    const aliasName = aliasNames.join(', ');
+                    // レコードあるチャック
+                    const hasRecord = row.hasOwnProperty('id') && row.id !== null; 
+            
+                    resultData.push({ ...row, hasRecord, aliasName, isOrg });
+                });
+
+                setData(resultData);
+                return result;
+    
+            } else if (response.status == 401) {
+              setErrors("認証の有効期限が切れました");
+              return false;
+            }
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
+            return false;
+        }  
+    }
+
     return(
         <RootLayout top={true} isSidebarInclude={true}>
             <div className="body-wrapper02">
@@ -140,40 +188,40 @@ export default function OrganizationList(){
                                                         <tbody>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">部署名</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="name" value={formData.name} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">よみ</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="readName" value={formData.readName} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">コード</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="departmentId" value={formData.departmentId} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">階&nbsp;層</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="level" value={formData.level} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">上位組織</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="parentOrganization" value={formData.parentOrganization} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">別&nbsp;名</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="aliasName" value={formData.aliasName} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">電話番号</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="phone" value={formData.phone} onChange={handleChange} /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td className="col-6 text-center align-middle bg-light py-3">備&nbsp;考</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" /></td>
+                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="remarks" value={formData.remarks} onChange={handleChange} /></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                     <div className="modal-footer">
-                                                        <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}}>絞り込み</button>
+                                                        <button type="button" onClick={handleFilter} className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}}>絞り込み</button>
                                                         <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                                     </div>{/* /.modal-footer  */}
                                                 </div>
@@ -192,15 +240,16 @@ export default function OrganizationList(){
     );
 }
 
-export const showList = async () => {
+export const showList = async (formData) => {
     try {
-        const response = await organization.organizationList();
+        const response = await organization.organizationList(formData);
         // APIの結果が正常だった場合
         // 部署なし or その他エラー
         if (response.status == 200 && response !== null) {
             const res = await response.json();
-
+            console.log(res);
             const result = processData(res);
+            console.log("processData return " + JSON.stringify(result));
             return result;
 
         } else if (response.status == 401) {
@@ -218,6 +267,7 @@ export const showList = async () => {
 
 export const processData = (data) => {
     const parentRows = [];
+    console.log(data);
     data.map(row => {
         const aliasNames = row.organizationAliasList.map(obj => obj.aliasName);
         const aliasName = aliasNames.join(', ');

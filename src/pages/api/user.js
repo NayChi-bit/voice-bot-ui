@@ -98,5 +98,6 @@ export const systemUser = {
     userList, 
     userDetail,
     userCreate,
-    userDelete
+    userDelete,
+    userEdit
 };

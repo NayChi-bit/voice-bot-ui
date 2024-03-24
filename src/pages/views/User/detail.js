@@ -18,9 +18,6 @@ export default function organizationDetail(){
     const [formData, setFormData] = useState({});
     const userIdMin = LoginPolicy.system.policy.userIdMin;
     const userIdMax = LoginPolicy.system.policy.userIdMax;
-    const passwordMin = LoginPolicy.system.policy.passwordMin;
-    const passwordMax = LoginPolicy.system.policy.passwordMax;
-    const minCharTypes = LoginPolicy.system.policy.minPasswordCharType;
 
     useEffect(() => {
         const id = sessionStorage.getItem('userId');
@@ -29,8 +26,6 @@ export default function organizationDetail(){
                 const response = await showDetail(id);
                 setData(response);
                 setFormData(response[0]);
-                // console.log("response[0]");
-                // console.log(response[0]);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -87,32 +82,6 @@ export default function organizationDetail(){
             setErrors("ユーザー名を入力してください");
             return false;
         }
-        // パスワードフィールドの値を取得
-        // パスワードの強度を計算
-        if(!formData.password || !formData.password.trim()){
-            setErrors("パスワードを入力してください。");
-            return false;
-        }
-        if(!formData.passwordConfirm || !formData.passwordConfirm.trim()){
-            setErrors("パスワード（確認）を入力してください。");
-            return false;
-        }
-        else if(formData.password !== formData.passwordConfirm){
-            setErrors("パスワードが相違しています。");
-            return false;
-        }
-        else if (!isValidPasswordCharType(formData.password)) {
-            setErrors(
-            "パスワードに使用できない文字が含まれています。使用できる記号は<>+!?#$%&()/~*です。"
-            );
-            return false;
-        } else if (formData.password.length < passwordMin || !isCharacterTypesEnough(formData.password)) {
-            setErrors("パスワードを複雑にしてください。");
-            return false;
-        } else if (formData.password.length > passwordMax) {
-            setErrors(`パスワードは${passwordMax}文字以下にしてください。`);
-            return false;
-        }
 
         var confirmed = showConfirmation(formData);
         if (!confirmed) {
@@ -147,34 +116,13 @@ export default function organizationDetail(){
         }
     };
 
-    function isValidPasswordCharType(password) {
-        // 英語小文字・英語大文字・記号以外の文字があるかどうかをチェック。
-        // 禁止文字が含まれていなかった場合にtrue
-        return /^[a-zA-Z0-9<>+!?#$%&()\/~*]+$/.test(password);
-    }
-
-    function isCharacterTypesEnough(password) {
-        return countCharacterTypes(password) >= minCharTypes;
-    }
-
     function showConfirmation(formData) {
         var confirmationMessage = `
           ユーザID: ${formData.userId}
-          パスワード: ${formData.password}
           表示名: ${formData.name}
         `;
     
         return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
-    }
-
-    // パスワード内に何種類の文字が含まれているかを確認する関数
-    function countCharacterTypes(password) {
-        var charTypes = 0;
-        if (/[a-z]/.test(password)) charTypes++;
-        if (/[A-Z]/.test(password)) charTypes++;
-        if (/[0-9]/.test(password)) charTypes++;
-        if (/[<>+!?#$%&()\/~*]/.test(password)) charTypes++; //登録可能な記号は<>+!?#$%&()/~*のみ
-        return charTypes;
     }
 
     // 戻るボタン押す
@@ -274,14 +222,6 @@ export default function organizationDetail(){
                                                     <tr>
                                                         <td className="col-6 text-center align-middle bg-light py-3">ユーザ名</td>
                                                         <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="name" value={formData.name} onChange={handleChange} /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">リセット</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="isPassReset" value={formData.isPassReset} onChange={handleChange} /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="col-6 text-center align-middle bg-light py-3">ロック</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="isLock" value={formData.isLock} onChange={handleChange} /></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

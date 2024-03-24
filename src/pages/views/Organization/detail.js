@@ -110,11 +110,15 @@ export default function organizationDetail(){
             // 別名fields set
             const newInputFields = [...inputFields];
             newInputFields[index] = e.target.value; // Update the value of the input field at the specified index
+            const updatedOrganizationAliasList = [...formData.organizationAliasList];
+            updatedOrganizationAliasList[index] = {aliasName:e.target.value};
             setInputFields(newInputFields);
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
                 organizationAliasNameList : newInputFields,
+                organizationAliasNames : newInputFields,
+                organizationAliasList: updatedOrganizationAliasList                
             }));
         }
     };
@@ -207,7 +211,7 @@ export default function organizationDetail(){
             上位組織:${formData.parentDepartmentName}
             電話番号:${formData.phone}
             備 考:${formData.remarks}
-            別名：${formData.organizationAliasNameList}
+            別名：${formData.organizationAliasNames}
         `;
 
         return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
@@ -240,9 +244,9 @@ export default function organizationDetail(){
         
         const aliasNames = data.organizationAliasList.map(obj => obj.aliasName);
         const aliasName = aliasNames.join(', ');
-        const organizationAliasNameList = aliasNames.join(', ');
+        const organizationAliasNames = aliasNames.join(', ');
 
-        resultData.push({ ...data, aliasName , organizationAliasNameList });
+        resultData.push({ ...data, aliasName , organizationAliasNames });
        
         return resultData;
     }

@@ -71,10 +71,15 @@ export default function organizationDetail(){
             const newInputFields = [...inputFields];
             newInputFields[index] = e.target.value; // Update the value of the input field at the specified index
             setInputFields(newInputFields);
+            const updatedEmployeeAliasList = [...formData.employeeAliasList];
+            updatedEmployeeAliasList[index] = {aliasName:e.target.value};
+
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
                 employeeAliasNameList : newInputFields,
+                employeeAliasNames : newInputFields,
+                employeeAliasList: updatedEmployeeAliasList                
             }));
         }
     };
@@ -154,7 +159,7 @@ export default function organizationDetail(){
           所属部署 :${formData.departmentName}
           電話番号:${formData.phone}
           備 考:${formData.remarks}
-          担当者別名：${formData.employeeAliasNameList}
+          担当者別名：${formData.employeeAliasNames}
         `;
 
         return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
@@ -214,12 +219,12 @@ export default function organizationDetail(){
         
         const aliasNames = data.employeeAliasList.map(obj => obj.aliasName);
         const aliasName = aliasNames.join(', ');
-        const employeeAliasNameList = aliasNames.join(', ');
+        const employeeAliasNames = aliasNames.join(', ');
         
         // レコードあるチャック
         const hasRecord = data.hasOwnProperty('id') && data.id !== null; 
 
-        resultData.push({ ...data, hasRecord, aliasName, employeeAliasNameList });
+        resultData.push({ ...data, hasRecord, aliasName, employeeAliasNames });
 
         return resultData;
     }

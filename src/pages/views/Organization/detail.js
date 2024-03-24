@@ -129,7 +129,7 @@ export default function organizationDetail(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            registOrg(formData);
+            editOrg(formData);
         } else {
           console.log("Error Data:", error)
         }
@@ -174,7 +174,7 @@ export default function organizationDetail(){
         return true;
     };
 
-    const registOrg = async (formData) => {
+    const editOrg = async (formData) => {
         try {
             const response = await organization.organizationEdit(formData);
             if (response.status == 409) {

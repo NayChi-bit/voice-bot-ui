@@ -3,6 +3,7 @@ import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
 import { Router, useRouter } from "next/router";
 import { systemUser } from "../../api/user";
+import LoginPolicy from "../../../environments/config.json";
 
 export default function organizationDetail(){
 
@@ -14,12 +15,22 @@ export default function organizationDetail(){
 
     const [error, setErrors] = useState("");
 
+    const [formData, setFormData] = useState({});
+    const userIdMin = LoginPolicy.system.policy.userIdMin;
+    const userIdMax = LoginPolicy.system.policy.userIdMax;
+    const passwordMin = LoginPolicy.system.policy.passwordMin;
+    const passwordMax = LoginPolicy.system.policy.passwordMax;
+    const minCharTypes = LoginPolicy.system.policy.minPasswordCharType;
+
     useEffect(() => {
         const id = sessionStorage.getItem('userId');
         const fetchData = async () => {
             try {
                 const response = await showDetail(id);
                 setData(response);
+                setFormData(response[0]);
+                // console.log("response[0]");
+                // console.log(response[0]);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -27,6 +38,144 @@ export default function organizationDetail(){
 
         fetchData();
     }, []);
+
+    // 値変更時のformData設定
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        }));
+    };
+
+    // 編集ボタン押す
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        // エラー出力箇所
+        var errorMessage = document.getElementById("error-message");
+    
+        if (validateForm()) {
+            console.debug("Form Data:", formData);
+            errorMessage.innerHTML = "";
+            
+            editUser(formData);
+        } else {
+            console.log("Error Data:", error)
+        }
+    };
+
+    // validation
+    const validateForm = () => {
+        // ユーザIDの検証
+        const userIdRegex = /[^a-zA-Z0-9@_-]/;
+        if (!formData.userId || !formData.userId.trim()) {
+            setErrors("ユーザーIDを入力してください");
+            return false;
+        } else if (userIdRegex.test(formData.userId)) {
+            setErrors(
+                "ユーザIDが正しくありません。使用できない文字が含まれています。"
+            );
+            return false;
+        } else if (formData.userId.length < userIdMin || userIdMax < formData.userId.length) {
+            setErrors("ユーザIDは" + userIdMin + "文字以上、" + userIdMax + "以下で設定してください。");
+            return false;
+        }
+
+        // ユーザー名チャック
+        if (!formData.name || !formData.name.trim()) {
+            setErrors("ユーザー名を入力してください");
+            return false;
+        }
+        // パスワードフィールドの値を取得
+        // パスワードの強度を計算
+        if(!formData.password || !formData.password.trim()){
+            setErrors("パスワードを入力してください。");
+            return false;
+        }
+        if(!formData.passwordConfirm || !formData.passwordConfirm.trim()){
+            setErrors("パスワード（確認）を入力してください。");
+            return false;
+        }
+        else if(formData.password !== formData.passwordConfirm){
+            setErrors("パスワードが相違しています。");
+            return false;
+        }
+        else if (!isValidPasswordCharType(formData.password)) {
+            setErrors(
+            "パスワードに使用できない文字が含まれています。使用できる記号は<>+!?#$%&()/~*です。"
+            );
+            return false;
+        } else if (formData.password.length < passwordMin || !isCharacterTypesEnough(formData.password)) {
+            setErrors("パスワードを複雑にしてください。");
+            return false;
+        } else if (formData.password.length > passwordMax) {
+            setErrors(`パスワードは${passwordMax}文字以下にしてください。`);
+            return false;
+        }
+
+        var confirmed = showConfirmation(formData);
+        if (!confirmed) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const editUser = async () => {
+        try {
+            const response = await systemUser.userEdit(formData);
+            console.debug(response);
+    
+            if (response.status == 409) {
+            alert("既に同じログインIDが存在していま");
+            } 
+            else if (response.status == 401) {
+            router.push("/");
+            } else if (response.status == 200) {
+            alert("ユーザの登録は完了しました。");
+            router.push("./list");
+            } else {
+            alert("登録に失敗しました");
+            return false;
+            }
+        } catch (error) {
+            // APIの結果が異常
+            console.log("エラーerror:", error);
+            alert("登録に失敗しました");
+            return false;
+        }
+    };
+
+    function isValidPasswordCharType(password) {
+        // 英語小文字・英語大文字・記号以外の文字があるかどうかをチェック。
+        // 禁止文字が含まれていなかった場合にtrue
+        return /^[a-zA-Z0-9<>+!?#$%&()\/~*]+$/.test(password);
+    }
+
+    function isCharacterTypesEnough(password) {
+        return countCharacterTypes(password) >= minCharTypes;
+    }
+
+    function showConfirmation(formData) {
+        var confirmationMessage = `
+          ユーザID: ${formData.userId}
+          パスワード: ${formData.password}
+          表示名: ${formData.name}
+        `;
+    
+        return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
+    }
+
+    // パスワード内に何種類の文字が含まれているかを確認する関数
+    function countCharacterTypes(password) {
+        var charTypes = 0;
+        if (/[a-z]/.test(password)) charTypes++;
+        if (/[A-Z]/.test(password)) charTypes++;
+        if (/[0-9]/.test(password)) charTypes++;
+        if (/[<>+!?#$%&()\/~*]/.test(password)) charTypes++; //登録可能な記号は<>+!?#$%&()/~*のみ
+        return charTypes;
+    }
 
     // 戻るボタン押す
     const handleBack = (e) => {
@@ -115,28 +264,29 @@ export default function organizationDetail(){
                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                                         </div>
                                         <div className="modal-body">
+                                            <div className="error-message" id="error-message" style={{marginBottom :"15px"}}>{error}</div>
                                             <table className="table table-bordered">
                                                 <tbody>
                                                     <tr>
                                                         <td className="col-6 text-center align-middle bg-light py-3">ユーザID</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].userId} /></td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="userId" value={formData.userId} onChange={handleChange} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td className="col-6 text-center align-middle bg-light py-3">ユーザ名</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].name} /></td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="name" value={formData.name} onChange={handleChange} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td className="col-6 text-center align-middle bg-light py-3">リセット</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].isPassReset} /></td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="isPassReset" value={formData.isPassReset} onChange={handleChange} /></td>
                                                     </tr>
                                                     <tr>
                                                         <td className="col-6 text-center align-middle bg-light py-3">ロック</td>
-                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" value={data[0].isLock} /></td>
+                                                        <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="isLock" value={formData.isLock} onChange={handleChange} /></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}}>編&nbsp;集</button>
+                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}} onClick={handleSubmit}>編&nbsp;集</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>

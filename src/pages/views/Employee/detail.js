@@ -88,7 +88,7 @@ export default function organizationDetail(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            registEmployee(formData);
+            editEmployee(formData);
         } else {
           console.log("Error Data:", error)
         }
@@ -103,7 +103,7 @@ export default function organizationDetail(){
         }
 
         // 上位組織チャック
-        if(formData.departmentName === null || !formData.departmentName){
+        if(formData.departmentId === null || !formData.departmentId){
             setErrors("所属部署名を選択してください。");
             return false;
         }
@@ -123,7 +123,7 @@ export default function organizationDetail(){
         return true;
     };
 
-    const registEmployee = async (formData) => {
+    const editEmployee = async (formData) => {
         try {
           const response = await employee.employeeEdit(formData);
           if (response.status == 409) {

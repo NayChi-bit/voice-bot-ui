@@ -1,13 +1,12 @@
-const organizationList = async (formData) => {
+const organizationList = async () => {
     const url = "http://localhost:8080/api/organization/list";
 
     try{
         const response = await fetch(url, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData)
         });
 
         if (response.status !== 200) {
@@ -76,25 +75,6 @@ const organizationCreate = async (formData) => {
   }
 };
 
-const organizationEdit = async (formData) => {
-  const url = "http://localhost:8080/api/organization/edit";
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    return response;
-  } catch (error) {
-    console.error("Error posting data:", error);
-    throw error;
-  }
-};
-
 const parentOrgList = async (level) => {
   const url = "http://localhost:8080/api/organization/parentOrgList/" + level;
 
@@ -106,7 +86,7 @@ const parentOrgList = async (level) => {
           },
       });
 
-      if (response.status !== 200) {
+      if (response.status !== 200 || response.status !== 400) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response;
@@ -120,6 +100,6 @@ export const organization = {
     organizationDelete,
     organizationDetail,
     organizationCreate,
-    parentOrgList,
-    organizationEdit
+    parentOrgList
 };
+  

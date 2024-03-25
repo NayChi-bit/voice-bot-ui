@@ -1,12 +1,13 @@
-const callLogList = async (req, res) => {
+const callLogList = async (formData) => {
     const url = "http://localhost:8080/api/callLog/list";
 
     try{
         const response = await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+             body: JSON.stringify(formData),
         });
 
         if (response.status !== 200) {
@@ -14,7 +15,7 @@ const callLogList = async (req, res) => {
         }
         return response;
     }catch (error) {
-    console.error("Error posting data:", error);
+    console.info("Error posting data:", error);
     throw error;
   }
 };

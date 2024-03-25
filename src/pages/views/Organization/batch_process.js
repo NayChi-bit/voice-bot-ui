@@ -54,6 +54,11 @@ export default function organizationRegister(){
         }
     };
 
+    // 戻るボタン押す
+    const handleBack = (e) => {
+    e.preventDefault();
+    router.push("./list");
+    }
 
     return(
         <RootLayout top={true} isSidebarInclude={true}>
@@ -88,7 +93,7 @@ export default function organizationRegister(){
                                 </tbody>
                                 </table>
                                 <div className="my-5">
-                                    <button className="btn btn-lg btn-secondary" type="button" style={{padding :"10px 60px"}}>戻&nbsp;る</button>
+                                    <button className="btn btn-lg btn-secondary" type="button" style={{padding :"10px 60px"}} onClick={handleBack}>戻&nbsp;る</button>
                                 </div>
                             </div>
                         </form>

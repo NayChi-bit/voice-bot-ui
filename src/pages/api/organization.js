@@ -1,3 +1,4 @@
+import env from "../../environments/config.json";
 const organizationList = async (formData) => {
     const url = env.apiTestUrl + "/api/organization/list";
 

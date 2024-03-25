@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { employee } from "../../api/employee";
 import { organization } from "@/pages/api/organization";
 
-export default function organizationDetail(){
+export default function EmployeeDetail(){
 
     // router
     const router = useRouter();

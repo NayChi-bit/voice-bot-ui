@@ -6,7 +6,7 @@ import { Router, useRouter } from "next/router";
 import { systemUser } from "../../api/user";
 import LoginPolicy from "../../../environments/config.json";
 
-export default function organizationDetail(){
+export default function UserDetail(){
 
     // router
     const router = useRouter();

@@ -5,7 +5,7 @@ import ConfirmModal from "../../../components/confirmModal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
 
-export default function organizationDetail(){
+export default function OrganizationDetail(){
 
     // router
     const router = useRouter();

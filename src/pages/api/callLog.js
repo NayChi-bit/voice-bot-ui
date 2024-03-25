@@ -1,5 +1,6 @@
+import env from "../../environments/config.json";
 const callLogList = async (formData) => {
-    const url = "http://localhost:8080/api/callLog/list";
+    const url = env.apiTestUrl + "/api/callLog/list";
 
     try{
         const response = await fetch(url, {

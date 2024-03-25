@@ -135,7 +135,7 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                     isVarticleTable ? (
                                         <React.Fragment key={row.id}>
                                             {row.cells.map((cell, index) => (
-                                            <tr>
+                                            <tr key={index}>
                                                 <React.Fragment key={index}>
                                                 <td className="col-6 text-center align-middle bg-light py-4">
                                                     {columns[index].Header}

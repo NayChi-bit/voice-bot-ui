@@ -90,10 +90,7 @@ export default function PasswordChange() {
     }
     if (mode === "reset") {
       // バックエンド登録処理
-      // var editUser = ((sessionStorage !== undefined) && sessionStorage.getItem("userName")) ? sessionStorage.getItem("userName") : "";
-      // var resetToken = ((sessionStorage !== undefined) && sessionStorage.getItem("resetToken")) ? sessionStorage.getItem("resetToken") : "";
       var formData = {
-        token: resetToken,
         newPassword: newPassword,
         username: editUser,
       };

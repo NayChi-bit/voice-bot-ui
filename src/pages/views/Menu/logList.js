@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import callLogList from "../../api/callLog";
 
-export default function Home() {
+export default function LogList() {
     // router
     const router = useRouter();
     const [error, setErrors] = useState("");

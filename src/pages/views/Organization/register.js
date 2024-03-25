@@ -3,7 +3,7 @@ import RootLayout from "../../../components/main";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
 
-export default function organizationRegister(){
+export default function OrganizationRegister(){
     // router
     const router = useRouter();
 

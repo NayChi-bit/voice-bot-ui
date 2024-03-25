@@ -1,12 +1,14 @@
-const employeeList = async (req, res) => {
-    const url = "http://localhost:8080/api/employee/list";
+import env from "../../environments/config.json";
+const employeeList = async (formData) => {
+    const url = env.apiTestUrl + "/api/employee/list";
 
     try{
         const response = await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify(formData),
         });
 
         if (response.status !== 200) {
@@ -20,7 +22,7 @@ const employeeList = async (req, res) => {
 };
 
 const employeeDetail = async (id) => {
-    const url = "http://localhost:8080/api/employee/detail/" + id;
+  const url = env.apiTestUrl + "/api/employee/detail/"+ id;
   
     try {
       const response = await fetch(url, {
@@ -38,7 +40,7 @@ const employeeDetail = async (id) => {
 };
 
 const employeeDelete = async (id) => {
-  const url = "http://localhost:8080/api/employee/delete/" + id;
+  const url = env.apiTestUrl + "/api/employee/delete/"+ id;
 
   try {
     const response = await fetch(url, {
@@ -56,7 +58,7 @@ const employeeDelete = async (id) => {
 };
 
 const employeeCreate = async (formData) => {
-  const url = "http://localhost:8080/api/employee/add";
+  const url = env.apiTestUrl + "/api/employee/add";
 
   try {
     const response = await fetch(url, {
@@ -75,7 +77,7 @@ const employeeCreate = async (formData) => {
 };
 
 const employeeEdit = async (formData) => {
-  const url = "http://localhost:8080/api/employee/edit";
+  const url = env.apiTestUrl + "/api/employee/edit";
 
   try {
     const response = await fetch(url, {

@@ -128,7 +128,6 @@ export default function OrganizationList(){
 
     const handleFilter = async (e) => {
         try {
-            alert(JSON.stringify(formData));
             const response = await organization.organizationList(formData);
             // APIの結果が正常だった場合
             // 部署なし or その他エラー
@@ -175,61 +174,59 @@ export default function OrganizationList(){
                             </div>
                             <div className="col-6 text-end">
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>&nbsp;
-                                {
-                                    <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
-                                        <div className="modal-dialog">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h1 className="modal-title fs-5" id="ModalLabel01">部署絞り込み</h1>
-                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <table className="table table-bordered">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">部署名</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="name" value={formData.name} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">よみ</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="readName" value={formData.readName} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">コード</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="departmentId" value={formData.departmentId} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">階&nbsp;層</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="level" value={formData.level} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">上位組織</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="parentOrganization" value={formData.parentOrganization} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">別&nbsp;名</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="aliasName" value={formData.aliasName} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">電話番号</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="phone" value={formData.phone} onChange={handleChange} /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td className="col-6 text-center align-middle bg-light py-3">備&nbsp;考</td>
-                                                                <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="remarks" value={formData.remarks} onChange={handleChange} /></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <div className="modal-footer">
-                                                        <button type="button" onClick={handleFilter} className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}}>絞り込み</button>
-                                                        <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
-                                                    </div>{/* /.modal-footer  */}
-                                                </div>
-                                            </div>{/* /.modal-content  */}
-                                        </div>{/* /.modal-dialog  */}
-                                    </div>
-                                }
-                                    
+                                
+                                <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">
+                                    <div className="modal-dialog">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h1 className="modal-title fs-5" id="ModalLabel01">部署絞り込み</h1>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                                            </div>
+                                            <div className="modal-body">
+                                                <table className="table table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">部署名</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="name" value={formData.name} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">よみ</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="readName" value={formData.readName} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">コード</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="departmentId" value={formData.departmentId} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">階&nbsp;層</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="level" value={formData.level} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">上位組織</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="parentOrganization" value={formData.parentOrganization} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">別&nbsp;名</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="aliasName" value={formData.aliasName} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">電話番号</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="phone" value={formData.phone} onChange={handleChange} /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="col-6 text-center align-middle bg-light py-3">備&nbsp;考</td>
+                                                            <td className="col-6 text-center align-middle py-3"><input type="text" className="custom-input" name="remarks" value={formData.remarks} onChange={handleChange} /></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div className="modal-footer">
+                                                    <button type="button" onClick={handleFilter} className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}}>絞り込み</button>
+                                                    <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
+                                                </div>{/* /.modal-footer  */}
+                                            </div>
+                                        </div>{/* /.modal-content  */}
+                                    </div>{/* /.modal-dialog  */}
+                                </div>
                             </div>
                         </div>
                         <Table columns={columns} data={data} />

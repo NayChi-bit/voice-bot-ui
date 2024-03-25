@@ -1,5 +1,6 @@
+import env from "../../environments/config.json";
 const userList = async () => {
-    const url = "http://localhost:8080/api/user/list";
+  const url = env.apiTestUrl + "/api/user/list";
 
     try{
         const response = await fetch(url, {
@@ -21,7 +22,7 @@ const userList = async () => {
 };
 
 const userDetail = async (id) => {
-    const url = "http://localhost:8080/api/user/detail/" + id;
+  const url = env.apiTestUrl + "/api/user/detail/" + id;
   
     try {
       const response = await fetch(url, {
@@ -39,7 +40,7 @@ const userDetail = async (id) => {
 };
 
 const userCreate = async (formData) => {
-  const url = "http://localhost:8080/api/user/add";
+  const url = env.apiTestUrl + "/api/user/add";
 
   try {
     const response = await fetch(url, {
@@ -58,7 +59,7 @@ const userCreate = async (formData) => {
 };
 
 const userEdit = async (formData) => {
-  const url = "http://localhost:8080/api/user/edit";
+  const url = env.apiTestUrl + "/api/user/edit";
 
   try {
     const response = await fetch(url, {
@@ -77,7 +78,7 @@ const userEdit = async (formData) => {
 };
 
 const userDelete = async (id) => {
-  const url = "http://localhost:8080/api/user/delete/" + id;
+  const url = env.apiTestUrl + "/api/user/delete/" + id;
 
   try {
     const response = await fetch(url, {
@@ -95,7 +96,7 @@ const userDelete = async (id) => {
 };
 
 const setAccLock = async (formData) => {
-  const url = "http://localhost:8080/api/user/setAccLock";
+  const url = env.apiTestUrl + "/api/user/setAccLock";
 
   try {
     const response = await fetch(url, {

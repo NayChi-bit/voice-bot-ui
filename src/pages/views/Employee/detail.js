@@ -341,7 +341,7 @@ export default function organizationDetail(){
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}} onClick={handleSubmit} >編&nbsp;集</button>
+                                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={handleSubmit} >編&nbsp;集</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>

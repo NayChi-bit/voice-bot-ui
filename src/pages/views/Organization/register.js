@@ -178,7 +178,6 @@ export default function organizationRegister(){
           console.debug(response);
   
           if (response.status == 200) {
-            alert("call parent org api");
             const data = await response.json();
             const dropdownOptions = data.map(item => ({
                 value: item.name,

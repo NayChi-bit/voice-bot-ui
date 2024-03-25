@@ -1,12 +1,13 @@
-const organizationList = async () => {
-    const url = "http://localhost:8080/api/organization/list";
+const organizationList = async (formData) => {
+    const url = env.apiTestUrl + "/api/organization/list";
 
     try{
         const response = await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify(formData)
         });
 
         if (response.status !== 200) {
@@ -20,7 +21,7 @@ const organizationList = async () => {
 };
 
 const organizationDelete = async (id) => {
-    const url = "http://localhost:8080/api/organization/delete/" + id;
+  const url = env.apiTestUrl + "/api/organization/delete/" + id;
   
     try {
       const response = await fetch(url, {
@@ -38,7 +39,7 @@ const organizationDelete = async (id) => {
 };
 
 const organizationDetail = async (id) => {
-    const url = "http://localhost:8080/api/organization/detail/" + id;
+  const url = env.apiTestUrl + "/api/organization/detail/" + id;
   
     try {
       const response = await fetch(url, {
@@ -57,7 +58,26 @@ const organizationDetail = async (id) => {
 
 
 const organizationCreate = async (formData) => {
-  const url = "http://localhost:8080/api/organization/add";
+  const url = env.apiTestUrl + "/api/organization/add";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    throw error;
+  }
+};
+
+const organizationEdit = async (formData) => {
+  const url = env.apiTestUrl + "/api/organization/edit";
 
   try {
     const response = await fetch(url, {
@@ -76,7 +96,7 @@ const organizationCreate = async (formData) => {
 };
 
 const parentOrgList = async (level) => {
-  const url = "http://localhost:8080/api/organization/parentOrgList/" + level;
+  const url = env.apiTestUrl + "/api/organization/parentOrgList/" + level;
 
   try{
       const response = await fetch(url, {
@@ -86,7 +106,7 @@ const parentOrgList = async (level) => {
           },
       });
 
-      if (response.status !== 200 || response.status !== 400) {
+      if (response.status !== 200) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response;
@@ -100,6 +120,6 @@ export const organization = {
     organizationDelete,
     organizationDetail,
     organizationCreate,
-    parentOrgList
+    parentOrgList,
+    organizationEdit
 };
-  

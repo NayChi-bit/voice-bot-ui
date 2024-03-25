@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
 import Table from "../../../components/table";
+import ConfirmModal from "../../../components/confirmModal";
 import { useRouter } from "next/router";
 import { organization } from "../../api/organization";
 
@@ -25,6 +26,9 @@ export default function organizationDetail(){
 
     // 別名テキスト追加削除
     const [inputFields, setInputFields] = useState([]);
+
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    var confirm = "org";
 
     useEffect(() => {
         if (selectedValue !== '') {
@@ -133,7 +137,7 @@ export default function organizationDetail(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            editOrg(formData);
+            // editOrg(formData);
         } else {
           console.log("Error Data:", error)
         }
@@ -170,10 +174,10 @@ export default function organizationDetail(){
             return false;
         }
 
-        var confirmed = showConfirmation(formData);
-        if (!confirmed) {
-            return false;
-        }
+        setIsConfirmModalOpen(true);
+        const confirmButton = document.getElementById("confirmBtn");
+        confirmButton.setAttribute("data-bs-toggle", "modal");
+        confirmButton.setAttribute("data-bs-target", "#ConfirmModal");
 
         return true;
     };
@@ -189,7 +193,7 @@ export default function organizationDetail(){
                 router.push("/");
             } else if (response.status == 200) {
             alert("部署の登録は完了しました。");
-                router.push("./list");
+                router.reload();
             } else {
                 alert("登録に失敗しました");
             return false;
@@ -202,20 +206,6 @@ export default function organizationDetail(){
         }
     };
         
-    function showConfirmation(formData) {
-        var confirmationMessage = `
-            部署ID: ${formData.departmentId}
-            部署名: ${formData.name}
-            よみ:${formData.readName}
-            階 層:${formData.level}
-            上位組織:${formData.parentDepartmentName}
-            電話番号:${formData.phone}
-            備 考:${formData.remarks}
-            別名：${formData.organizationAliasNames}
-        `;
-
-        return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
-    }
 
     const showDetail = async (id) => {
         try {
@@ -396,7 +386,7 @@ export default function organizationDetail(){
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={handleSubmit}>編&nbsp;集</button>
+                                                <button type="button" className="btn btn-primary" id="confirmBtn" style={{padding : "10px 45px"}} onClick={handleSubmit}>更&nbsp;新</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>
@@ -404,6 +394,7 @@ export default function organizationDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
+                        {<ConfirmModal formData={isConfirmModalOpen ? formData : ''} editForm={isConfirmModalOpen ? editOrg : ''} confirm={confirm}/>}
                     </main>
                 </div>
             </div>

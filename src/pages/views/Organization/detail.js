@@ -182,16 +182,16 @@ export default function organizationDetail(){
         try {
             const response = await organization.organizationEdit(formData);
             if (response.status == 409) {
-            const result = await response.json();
-            alert(JSON.stringify(result.body));
+                const result = await response.json();
+                alert(JSON.stringify(result.body));
             } 
             else if (response.status == 401) {
-            router.push("/");
+                router.push("/");
             } else if (response.status == 200) {
             alert("部署の登録は完了しました。");
-            router.push("./list");
+                router.push("./list");
             } else {
-            alert("登録に失敗しました");
+                alert("登録に失敗しました");
             return false;
             }
         } catch (error) {

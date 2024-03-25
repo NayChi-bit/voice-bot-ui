@@ -166,6 +166,66 @@ export default function organizationDetail(){
         return resultData;
     }
 
+    const setPasswordReset = async (e) => {
+        try {
+            router.push("../Menu/passwordChange");
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
+            return false;
+        }  
+    }
+
+    const setAccLock = async (event, isLock) => {
+        try {
+            setFormData((prevData) => {
+                // Update isLock field
+                const updatedData = {
+                    ...prevData,
+                    isLock: isLock ? "ON" : "OFF"
+                };
+    
+                // Call API fetch after updating form data
+                setAccLockApi(updatedData);
+    
+                // Return updated form data
+                return updatedData;
+            });
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
+            return false;
+        }  
+    }
+
+    const setAccLockApi = async (formData) => {
+        try {
+            
+            console.log(formData);
+            const response = await systemUser.setAccLock(formData);
+            // APIの結果が正常だった場合
+            // 部署なし or その他エラー
+            if (response.status == 200 && response !== null) {
+                const response = await showDetail(formData.id);
+                setData(response);
+  
+            } else if (response.status == 401) {
+              setErrors("認証の有効期限が切れました");
+              return false;
+            }
+        } catch (errors) {
+            // APIの結果が異常
+            console.debug(errors.status);
+            console.error("エラーerror:", errors);
+            setErrors("エラーが発生しました");
+            return false;
+        }  
+    }
+    
     const columns =  [
         {
             Header: 'ユーザID',
@@ -198,8 +258,21 @@ export default function organizationDetail(){
                                 <div className="my-5">
                                     <button type="button" className="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{padding :"10px 60px"}}>編&nbsp;集</button>&nbsp;&nbsp;
                                     <button className="btn btn-lg btn-secondary" type="button" onClick={handleBack} style={{padding :"10px 60px"}}>戻&nbsp;る</button>&nbsp;&nbsp;
-                                    <button className="btn btn-lg btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Modal02" style={{padding :"10px 60px"}}>パスワードリセット</button>&nbsp;&nbsp;
-                                    <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal03	" style={{padding :"10px 60px"}}>アカウントロック</button>
+                                    {
+                                        formData.isPassReset !== "ON" && (
+                                        <button className="btn btn-lg btn-primary" type="button"  data-bs-toggle="modal" data-bs-target="#Modal02" style={{padding :"10px 60px"}}>パスワードリセット</button>
+                                    )} 
+                                    {
+                                        formData.isLock == "ON" && (
+                                            <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal04	" style={{padding :"10px 60px"}}>アカウントロック削除</button>
+                                        )
+                                    }
+                                    {
+                                        formData.isLock == "OFF" && (
+                                            <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal03	" style={{padding :"10px 60px"}}>アカウントロック</button>
+                                        )
+                                    }
+                                    
                                 </div>
                             </div>
                         </form>
@@ -226,7 +299,7 @@ export default function organizationDetail(){
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" style={{padding : "10px 45px"}} onClick={handleSubmit}>編&nbsp;集</button>
+                                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={handleSubmit}>編&nbsp;集</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>
@@ -234,6 +307,54 @@ export default function organizationDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
+                        <div className="modal fade" id="Modal02" tabIndex="-1" aria-labelledby="ModalLabel02">
+                            <div className="modal-dialog">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <p>バスワードをリセット</p>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p>バスワードをリセットしますか。</p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={setPasswordReset}>OK</button>
+                                        <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal fade" id="Modal03" tabIndex="-1" aria-labelledby="ModalLabel03">
+                            <div className="modal-dialog">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <p>アカウントロック</p>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p>アカウントをロックしますか。</p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={(event) => setAccLock(event, true)}>OK</button>
+                                        <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal fade" id="Modal04" tabIndex="-1" aria-labelledby="ModalLabel04">
+                            <div className="modal-dialog">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <p>アカウントロック</p>
+                                    </div>
+                                    <div className="modal-body">
+                                        <p>アカウントロックを削除しますか。</p>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" style={{padding : "10px 45px"}} onClick={(event) => setAccLock(event, false)}>OK</button>
+                                        <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </main>
                 </div>
             </div>

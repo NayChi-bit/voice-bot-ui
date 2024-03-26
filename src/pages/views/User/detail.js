@@ -63,7 +63,7 @@ export default function UserDetail(){
             errorMessage.innerHTML = "";
             
             // editUser(formData);
-            setHaveError(false); // 
+            setHaveError(false); 
         } else {
             setHaveError(true);
             console.log("Error Data:", error);
@@ -257,7 +257,7 @@ export default function UserDetail(){
                                     {
                                         formData.isPassReset !== "ON" && (
                                         <button className="btn btn-lg btn-primary" type="button"  data-bs-toggle="modal" data-bs-target="#Modal02" style={{padding :"10px 60px"}}>パスワードリセット</button>
-                                    )} 
+                                    )}&nbsp;&nbsp;
                                     {
                                         formData.isLock == "ON" && (
                                             <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal04	" style={{padding :"10px 60px"}}>アカウントロック削除</button>
@@ -268,7 +268,6 @@ export default function UserDetail(){
                                             <button type="button" className="btn btn-lg btn-danger" data-bs-toggle="modal" data-bs-target="#Modal03	" style={{padding :"10px 60px"}}>アカウントロック</button>
                                         )
                                     }
-                                    
                                 </div>
                             </div>
                         </form>
@@ -277,7 +276,7 @@ export default function UserDetail(){
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h1 className="modal-title fs-5" id="ModalLabel01">担当者詳細&nbsp;集</h1>
+                                            <h1 className="modal-title fs-5" id="ModalLabel01">ユーザー詳細編集</h1>
                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                                         </div>
                                         <div className="modal-body">

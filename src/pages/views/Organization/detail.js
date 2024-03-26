@@ -27,7 +27,7 @@ export default function OrganizationDetail(){
     // 別名テキスト追加削除
     const [inputFields, setInputFields] = useState([]);
 
-    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [haveError, setHaveError] = useState(false);
     var confirm = "org";
 
     useEffect(() => {
@@ -104,6 +104,11 @@ export default function OrganizationDetail(){
         if(name == "level") {
             setSelectedValueLevel(e.target.value);
         }
+
+        if (!haveError) {
+            const confirmButton = document.getElementById("confirmBtn");
+            confirmButton.removeAttribute("data-bs-toggle", "modal");
+        }
     };
 
     // 別名dropdown
@@ -128,7 +133,6 @@ export default function OrganizationDetail(){
     };
 
     const handleSubmit = async (e) => {
-    
         e.preventDefault();
         // エラー出力箇所
         var errorMessage = document.getElementById("error-message");
@@ -138,7 +142,9 @@ export default function OrganizationDetail(){
             errorMessage.innerHTML = "";
             
             // editOrg(formData);
+            setHaveError(false); 
         } else {
+            setHaveError(true);
           console.log("Error Data:", error)
         }
     };
@@ -173,11 +179,6 @@ export default function OrganizationDetail(){
             setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
             return false;
         }
-
-        setIsConfirmModalOpen(true);
-        const confirmButton = document.getElementById("confirmBtn");
-        confirmButton.setAttribute("data-bs-toggle", "modal");
-        confirmButton.setAttribute("data-bs-target", "#ConfirmModal");
 
         return true;
     };
@@ -386,7 +387,7 @@ export default function OrganizationDetail(){
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" id="confirmBtn" style={{padding : "10px 45px"}} onClick={handleSubmit}>更&nbsp;新</button>
+                                                <button type="button" id="confirmBtn" className="btn btn-primary" data-bs-toggle={!haveError ? "modal" : ""} data-bs-target="#ConfirmModal" style={{padding : "10px 45px"}} onClick={handleSubmit}>更&nbsp;新</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>
@@ -394,7 +395,7 @@ export default function OrganizationDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
-                        {<ConfirmModal formData={isConfirmModalOpen ? formData : ''} editForm={isConfirmModalOpen ? editOrg : ''} confirm={confirm}/>}
+                        {!haveError && (<ConfirmModal formData={formData} editForm={editOrg} confirm={confirm}/>)}
                     </main>
                 </div>
             </div>

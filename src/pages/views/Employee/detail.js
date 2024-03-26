@@ -57,6 +57,16 @@ export default function EmployeeDetail(){
         const newInputFields = [...inputFields];
         newInputFields.splice(index, 1); // Remove the input field at the specified index
         setInputFields(newInputFields);
+
+        // update employeeAliasList
+        const updatedEmployeeAliasList = [...formData.employeeAliasList];
+        updatedEmployeeAliasList.splice(index, 1);
+        setFormData((prevData) => ({
+            ...prevData,
+            employeeAliasNameList : newInputFields,
+            employeeAliasNames : updatedEmployeeAliasList.map(item => item.aliasName).join(', '),
+            employeeAliasList: updatedEmployeeAliasList                
+        }));
     };
 
     const handleChange = (e) => {
@@ -89,7 +99,7 @@ export default function EmployeeDetail(){
                 ...prevData,
                 [name]: value,
                 employeeAliasNameList : newInputFields,
-                employeeAliasNames : newInputFields,
+                employeeAliasNames : updatedEmployeeAliasList.map(item => item.aliasName).join(', '),
                 employeeAliasList: updatedEmployeeAliasList                
             }));
         }

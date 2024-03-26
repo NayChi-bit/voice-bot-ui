@@ -64,6 +64,16 @@ export default function OrganizationDetail(){
         const newInputFields = [...inputFields];
         newInputFields.splice(index, 1); // Remove the input field at the specified index
         setInputFields(newInputFields);
+
+        // update organizationAliasList
+        const updatedOrganizationAliasList = [...formData.organizationAliasList];
+        updatedOrganizationAliasList.splice(index, 1);
+        setFormData((prevData) => ({
+            ...prevData,
+            organizationAliasNameList : newInputFields,
+            organizationAliasNames :  updatedOrganizationAliasList.map(item => item.aliasName).join(', '),
+            organizationAliasList: updatedOrganizationAliasList
+        }));
     };
 
     const getParentOrgOpt = async (level) => {
@@ -126,7 +136,7 @@ export default function OrganizationDetail(){
                 ...prevData,
                 [name]: value,
                 organizationAliasNameList : newInputFields,
-                organizationAliasNames : newInputFields,
+                organizationAliasNames : updatedOrganizationAliasList.map(item => item.aliasName).join(', '),
                 organizationAliasList: updatedOrganizationAliasList                
             }));
         }

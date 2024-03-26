@@ -19,7 +19,7 @@ export default function UserDetail(){
     const [formData, setFormData] = useState({});
     const userIdMin = LoginPolicy.system.policy.userIdMin;
     const userIdMax = LoginPolicy.system.policy.userIdMax;
-    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [haveError, setHaveError] = useState(false);
     var confirm = "user";
 
     useEffect(() => {
@@ -44,6 +44,11 @@ export default function UserDetail(){
         ...prevData,
         [name]: value,
         }));
+
+        if (!haveError) {
+            const confirmButton = document.getElementById("confirmBtn");
+            confirmButton.removeAttribute("data-bs-toggle", "modal");
+        }
     };
 
     // 編集ボタン押す
@@ -58,7 +63,9 @@ export default function UserDetail(){
             errorMessage.innerHTML = "";
             
             // editUser(formData);
+            setHaveError(false); // 
         } else {
+            setHaveError(true);
             console.log("Error Data:", error);
         }
     };
@@ -85,11 +92,6 @@ export default function UserDetail(){
             setErrors("ユーザー名を入力してください");
             return false;
         }
-
-        setIsConfirmModalOpen(true);
-        const confirmButton = document.getElementById("confirmBtn");
-        confirmButton.setAttribute("data-bs-toggle", "modal");
-        confirmButton.setAttribute("data-bs-target", "#ConfirmModal");
 
         return true;
     };
@@ -293,7 +295,7 @@ export default function UserDetail(){
                                                 </tbody>
                                             </table>
                                             <div className="modal-footer">
-                                                <button type="button" id="confirmBtn" className="btn btn-primary" style={{padding : "10px 45px"}} onClick={handleSubmit}>更&nbsp;新</button>
+                                                <button type="button" id="confirmBtn" className="btn btn-primary" data-bs-toggle={!haveError ? "modal" : ""} data-bs-target="#ConfirmModal" style={{padding : "10px 45px"}} onClick={handleSubmit}>更&nbsp;新</button>
                                                 <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal" style={{padding : "10px 37px"}}>キャンセル</button>
                                             </div>{/* /.modal-footer  */}
                                         </div>
@@ -301,7 +303,7 @@ export default function UserDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
-                        {<ConfirmModal formData={isConfirmModalOpen ? formData : ''} editForm={isConfirmModalOpen ? editUser : ''} confirm={confirm}/>}
+                        {!haveError && (<ConfirmModal formData={formData} editForm={editUser} confirm={confirm}/>)}
                         <div className="modal fade" id="Modal02" tabIndex="-1" aria-labelledby="ModalLabel02">
                             <div className="modal-dialog">
                                 <div className="modal-content">

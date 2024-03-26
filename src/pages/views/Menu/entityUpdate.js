@@ -1,5 +1,6 @@
 import { useState } from "react";
 import RootLayout from "../../../components/main";
+import env from "../../../environments/config.json";
 
 export default function EntityUpdate() {
 

@@ -34,7 +34,6 @@ export default function LogList() {
     const showList = async () => {
         try {            
             const response = await callLogList(formData);
-            console.log(formData);
             // alert(JSON.stringify(formData));
             // APIの結果が正常だった場合
             // 部署なし or その他エラー
@@ -96,23 +95,23 @@ export default function LogList() {
     const [endTime, setEndTime] = useState(null);
 
     const handleStartDateChange = (date) => {
-        console.log(date);
+        var stDate = null;
         if (date != null) {
-            const stDate = formatDate(new Date(date));
-            console.log(stDate);
-            setSelectedStartDate(stDate);
-        }
+            stDate = formatDate(new Date(date));
+            setSelectedStartDate(stDate); 
+        }else {
+            setSelectedStartDate(null); 
+        }      
         
         if(startTime != null){
-            const dateTime = stDate + " " + startTime;
-            console.log("notime" + dateTime);
+            const dateTime = stDate != null ? stDate + " " + startTime : null;
             setformData((prevData) => ({
                 ...prevData,
                 startDate: dateTime,
             }));
         } else {
-            const dateTime = stDate + " 00:00:00";
-            console.log("time" + dateTime);
+            
+            const dateTime = stDate != null ? stDate + " 00:00:00" : null;
             setformData((prevData) => ({
                 ...prevData,
                 startDate: dateTime,
@@ -126,35 +125,38 @@ export default function LogList() {
         const day = String(date.getDate()).padStart(2, '0'); // Pad day with zero if needed
        
         return `${year}/${month}/${day}`;
-    };       
-
+    };  
+    
     const handleEndDateChange = (date) => {
-        const enDate = formatDate(new Date(date));
-        console.log(enDate);
-        setSelectedEndDate(enDate);
+        var enDate = null;
+        if (date != null) {
+            enDate = formatDate(new Date(date));
+            setSelectedEndDate(enDate); 
+        }else {
+            setSelectedEndDate(null); 
+        }      
+        
         if(endTime != null){
-            const dateTime = enDate + " " + endTime;
-            console.log("notime" + dateTime);
+            const dateTime = enDate != null ? enDate + " " + endTime : null;
             setformData((prevData) => ({
                 ...prevData,
                 endDate: dateTime,
             }));
         } else {
-            const dateTime = enDate + " 00:00:00";
-            console.log("time" + dateTime);
+            
+            const dateTime = enDate != null ? enDate + " 00:00:00" : null;
             setformData((prevData) => ({
                 ...prevData,
                 endDate: dateTime,
             }));
-        } 
-    };
+        }        
+     };
+
 
     const handleStartTimeChange = (e) => {
         setStartTime(e.target.value);
-        console.log(startTime);
         if(selectedStartDate != null){
             const dateTime = selectedStartDate + " " + e.target.value;
-            console.log("time" + dateTime);
             setformData((prevData) => ({
                 ...prevData,
                 startDate: dateTime,
@@ -164,10 +166,8 @@ export default function LogList() {
 
      const handleEndTimeChange = (e) => {
         setEndTime(e.target.value);
-        console.log(endTime);
         if(selectedEndDate != null){
             const dateTime = selectedEndDate + " "+ e.target.value;
-            console.log("time" + dateTime);
             setformData((prevData) => ({
                 ...prevData,
                 endDate: dateTime,
@@ -187,7 +187,6 @@ export default function LogList() {
     const searchBtn = async (e) => { 
         try {
             const result = await showList(formData);
-            alert(JSON.stringify(result));
             setData(result);
 
         } catch (error) {
@@ -212,11 +211,12 @@ export default function LogList() {
                             <div className="row mb-3">
                                 <div className="col text-start">
                                     <label htmlFor="start-date">開始日</label>
-                                    <DatePicker className="form-control" id="startDate" dateFormat="yyyy/MM/dd" selected={selectedStartDate} onChange={handleStartDateChange} input = {true}/>
+                                    <DatePicker className="form-control" id="startDate" dateFormat="yyyy/MM/dd" selected={selectedStartDate} onChange={handleStartDateChange} />
                                 </div>
                                 <div className="col">
                                     <label></label>
                                     <select name="startTime" onChange={(e) => handleStartTimeChange(e)} className="form-select" id="Select01" style={{width: "100px", height: "46px"}}>
+                                        <option value="00:00:00"></option>
                                         <option value="00:00:00">00:00</option>
                                         <option value="01:00:00">01:00</option>
                                         <option value="02:00:00">02:00</option>
@@ -251,6 +251,7 @@ export default function LogList() {
                                 <div className="col">
                                     <label></label>
                                     <select name="endTime" onChange={(e) => handleEndTimeChange(e)} className="form-select" id="Select02" style={{width: "100px", height: "46px"}}>
+                                        <option value="00:00:00"></option>
                                         <option value="00:00:00">00:00</option>
                                         <option value="01:00:00">01:00</option>
                                         <option value="02:00:00">02:00</option>
@@ -291,7 +292,7 @@ export default function LogList() {
                                 </div>
                             </div>
                         </form>
-                        <Table columns={columns} data={data} paginationEnabled={true} />
+                        <Table columns={columns} data={data} paginationEnabled={true} tabindex="0" />
                     </main>
                 </div>
             </div>

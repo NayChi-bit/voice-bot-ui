@@ -28,7 +28,8 @@ export default function EntityUpdate() {
       data.set('file', file);
 
       //エンティティ更新API呼び出し
-      const res = await fetch('http://localhost:8080/api/dialogFlow/updateEntities', {
+      const url = env.apiTestUrl + "/api/dialogFlow/updateEntities";
+      const res = await fetch(url, {
         method: 'POST',
         body: data
       })

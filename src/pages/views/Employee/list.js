@@ -125,6 +125,11 @@ export default function EmployeeList(){
         []
     )
 
+    //階層切替
+    const refresh = () => {
+        router.push( window.location.reload())
+    }
+
     return(
         <RootLayout top={true} isSidebarInclude={true}>
             <div className="body-wrapper02">
@@ -137,6 +142,7 @@ export default function EmployeeList(){
                                 <button type="button" className="btn btn-primary" onClick={addBatch} style={{ padding: "10px 40px" }}>一括処理</button>
                             </div>
                             <div className="col-6 text-end">
+                                <button type="button" className="btn btn-primary" onClick={refresh} style={{ padding: "10px 40px" }}>階層切替</button>&nbsp;
                                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal01" style={{ padding: "10px 40px" }}>絞り込み表示</button>
                             
                                 <div className="modal fade" id="Modal01" tabIndex="-1" aria-labelledby="ModalLabel01">

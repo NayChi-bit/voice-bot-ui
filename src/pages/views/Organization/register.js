@@ -106,10 +106,10 @@ export default function OrganizationRegister(){
         //部署名の検証
         const departmentIdIdRegex = /[^a-zA-Z0-9]/;
         if (!formData.departmentId || !formData.departmentId.trim()) {
-            setErrors("部署IDを入力してください");
+            setErrors("部署コードを入力してください");
             return false;
         } else if (departmentIdIdRegex.test(formData.departmentId)) {
-            setErrors("部署IDが正しくありません。使用できない文字が含まれています。");
+            setErrors("部署コードが正しくありません。使用できない文字が含まれています。");
             return false;
         } 
         // else if (formData.departmentId.length < depIdMin || depIdMax < formData.departmentId.length) {
@@ -131,10 +131,10 @@ export default function OrganizationRegister(){
 
         //電話番号チャック
         const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
-        if (!phoneNumberRegex.test(formData.phone)) {
-            setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
-            return false;
-        }
+        // if (!phoneNumberRegex.test(formData.phone)) {
+        //     setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
+        //     return false;
+        // }
 
         return true;
     };

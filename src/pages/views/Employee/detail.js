@@ -134,10 +134,10 @@ export default function EmployeeDetail(){
             return false;
         }
 
-        // 電話番号チャック
-        const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
+        //電話番号チャック
+        const phoneNumberRegex = /^[\d-]+$/;
         if (!phoneNumberRegex.test(formData.phone)) {
-            setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
+            setErrors("電話番号は不要な文字が入ってしまいました。");
             return false;
         }
 

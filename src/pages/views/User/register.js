@@ -33,11 +33,6 @@ export default function UserRegister(){
         ...prevData,
         [name]: value,
         }));
-
-        if (!haveError) {
-            const confirmButton = document.getElementById("confirmBtn");
-            confirmButton.removeAttribute("data-bs-toggle", "modal");
-        }
     };
 
     //登録ボタン押す

@@ -59,11 +59,6 @@ export default function OrganizationRegister(){
         if(name == "level"){
             setSelectedValueLevel(e.target.value);
         }
-
-        if (!haveError) {
-            const confirmButton = document.getElementById("confirmBtn");
-            confirmButton.removeAttribute("data-bs-toggle", "modal");
-        }
     };
 
     //別名dropdown

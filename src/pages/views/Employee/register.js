@@ -46,11 +46,6 @@ export default function EmployeeRegister(){
         ...prevData,
         [name]: value,
         }));
-
-        if (!haveError) {
-            const confirmButton = document.getElementById("confirmBtn");
-            confirmButton.removeAttribute("data-bs-toggle", "modal");
-        }
     };
 
     //別名dropdown

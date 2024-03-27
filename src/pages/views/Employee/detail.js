@@ -25,8 +25,6 @@ export default function EmployeeDetail(){
     // 別名テキスト追加削除
     const [inputFields, setInputFields] = useState([]);
 
-    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-
     const [haveError, setHaveError] = useState(false);
     var confirm = "employee";
 
@@ -354,7 +352,7 @@ export default function EmployeeDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
-                        {!haveError && (<ConfirmModal formData={formData} editForm={editEmployee} confirm={confirm}/>)}
+                        {!haveError && (<ConfirmModal formData={formData} actionForm={editEmployee} confirm={confirm}/>)}
                     </main>
                 </div>
             </div>

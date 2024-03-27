@@ -1,6 +1,6 @@
-const ConfirmModal = ({ formData, editForm, confirm }) => {
+const ConfirmModal = ({ formData, actionForm, confirm }) => {
     const handleConfirm = () => {
-        editForm(formData);
+        actionForm(formData);
     };
 
     return ( 
@@ -17,6 +17,7 @@ const ConfirmModal = ({ formData, editForm, confirm }) => {
                             <div style={{marginLeft: "88px", textAlign : "left"}}>
                                 <p>ユーザID: {formData.userId}</p>
                                 <p>表示名: {formData.name}</p>
+                                {formData.password && <p>パスワード: {formData.password}</p>}
                             </div>
                         )}
                         {  confirm === "org" && (

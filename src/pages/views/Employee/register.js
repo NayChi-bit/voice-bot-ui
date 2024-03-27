@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
+import ConfirmModal from "../../../components/confirmModal";
 import { useRouter } from "next/router";
 import { employee } from "../../api/employee";
 import { organization } from "@/pages/api/organization";
@@ -17,6 +18,9 @@ export default function EmployeeRegister(){
     
     //別名テキスト追加削除
     const [inputFields, setInputFields] = useState(['']);
+
+    const [haveError, setHaveError] = useState(false);
+    var confirm = "employee";
 
     useEffect(() => {
         getOrganizations();
@@ -42,6 +46,11 @@ export default function EmployeeRegister(){
         ...prevData,
         [name]: value,
         }));
+
+        if (!haveError) {
+            const confirmButton = document.getElementById("confirmBtn");
+            confirmButton.removeAttribute("data-bs-toggle", "modal");
+        }
     };
 
     //別名dropdown
@@ -71,8 +80,10 @@ export default function EmployeeRegister(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            registEmployee(formData);
+            // registEmployee(formData);
+            setHaveError(false);
         } else {
+            setHaveError(true);
           console.log("Error Data:", error)
         }
     };
@@ -95,11 +106,6 @@ export default function EmployeeRegister(){
         const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
         if (!phoneNumberRegex.test(formData.phone)) {
             setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
-            return false;
-        }
-
-        var confirmed = showConfirmation(formData);
-        if (!confirmed) {
             return false;
         }
 
@@ -130,19 +136,6 @@ export default function EmployeeRegister(){
         }
     };
       
-    function showConfirmation(formData) {
-        var confirmationMessage = `
-          担当者名: ${formData.name}
-          よみ:${formData.readName}
-          所属部署 :${formData.departmentId}
-          電話番号:${formData.phone}
-          備 考:${formData.remarks}
-          担当者別名：${formData.employeeAliasNameList}
-        `;
-
-        return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
-    }
-
     const getOrganizations = async () => {
         try {
           const response = await organization.organizationList();
@@ -233,11 +226,12 @@ export default function EmployeeRegister(){
                                     </tbody>
                                 </table>
                                 <div className="my-5">
-                                    <button className="btn btn-lg btn-primary" type="submit" style={{padding :"10px 60px"}}>登&nbsp;録</button>&nbsp;&nbsp;
+                                    <button className="btn btn-lg btn-primary" id="confirmBtn" type="submit"  data-bs-toggle={!haveError ? "modal" : ""} data-bs-target="#ConfirmModal" style={{padding :"10px 60px"}}>登&nbsp;録</button>&nbsp;&nbsp;
                                     <button className="btn btn-lg btn-secondary" type="reset"  style={{padding :"10px 32px"}} onClick={handleBack}>キャンセル</button>
                                 </div>
                             </div>
                         </form>
+                        {!haveError && (<ConfirmModal formData={formData} actionForm={registEmployee} confirm={confirm}/>)}
                     </div>
                 </div>
             </div>

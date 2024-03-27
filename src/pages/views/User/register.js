@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RootLayout from "../../../components/main";
+import ConfirmModal from "../../../components/confirmModal";
 import { useRouter } from "next/router";
 import { systemUser } from "../../api/user";
 import LoginPolicy from "../../../environments/config.json";
@@ -18,6 +19,9 @@ export default function UserRegister(){
     const passwordMax = LoginPolicy.system.policy.passwordMax;
     const minCharTypes = LoginPolicy.system.policy.minPasswordCharType;
 
+    const [haveError, setHaveError] = useState(false);
+    var confirm = "user";
+
     useEffect(() => {
         //showList();
     });
@@ -29,6 +33,11 @@ export default function UserRegister(){
         ...prevData,
         [name]: value,
         }));
+
+        if (!haveError) {
+            const confirmButton = document.getElementById("confirmBtn");
+            confirmButton.removeAttribute("data-bs-toggle", "modal");
+        }
     };
 
     //登録ボタン押す
@@ -42,8 +51,10 @@ export default function UserRegister(){
             console.debug("Form Data:", formData);
             errorMessage.innerHTML = "";
             
-            registUser(formData);
+            // registUser(formData);
+            setHaveError(false);
         } else {
+            setHaveError(true);
           console.log("Error Data:", error)
         }
     };
@@ -97,11 +108,6 @@ export default function UserRegister(){
             return false;
         }
 
-        var confirmed = showConfirmation(formData);
-        if (!confirmed) {
-            return false;
-        }
-
         return true;
     };
 
@@ -138,16 +144,6 @@ export default function UserRegister(){
 
     function isCharacterTypesEnough(password) {
         return countCharacterTypes(password) >= minCharTypes;
-    }
-
-    function showConfirmation(formData) {
-        var confirmationMessage = `
-          ユーザID: ${formData.userId}
-          パスワード: ${formData.password}
-          表示名: ${formData.name}
-        `;
-    
-        return confirm("以下の情報で登録してよろしいですか。？\n" + confirmationMessage);
     }
 
     // パスワード内に何種類の文字が含まれているかを確認する関数
@@ -198,12 +194,13 @@ export default function UserRegister(){
                                     </tbody>
                                 </table>
                                 <div className="my-5">
-                                    <button className="btn btn-lg btn-primary" type="submit" style={{padding :"10px 60px"}}>登&nbsp;録</button>&nbsp;&nbsp;
+                                    <button className="btn btn-lg btn-primary" id="confirmBtn" type="submit" data-bs-toggle={!haveError ? "modal" : ""} data-bs-target="#ConfirmModal" style={{padding :"10px 60px"}}>登&nbsp;録</button>&nbsp;&nbsp;
                                     <button className="btn btn-lg btn-secondary" type="reset"  style={{padding :"10px 32px"}} onClick={handleBack}>キャンセル</button>
                                 </div>
                             </div>
                         </main>
                     </form>
+                    {!haveError && (<ConfirmModal formData={formData} actionForm={registUser} confirm={confirm}/>)}
                 </div>
             </div>
         </RootLayout>

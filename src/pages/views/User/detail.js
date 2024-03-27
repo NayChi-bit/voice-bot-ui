@@ -302,7 +302,7 @@ export default function UserDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
-                        {!haveError && (<ConfirmModal formData={formData} editForm={editUser} confirm={confirm}/>)}
+                        {!haveError && (<ConfirmModal formData={formData} actionForm={editUser} confirm={confirm}/>)}
                         <div className="modal fade" id="Modal02" tabIndex="-1" aria-labelledby="ModalLabel02">
                             <div className="modal-dialog">
                                 <div className="modal-content">

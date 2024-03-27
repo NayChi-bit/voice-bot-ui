@@ -405,7 +405,7 @@ export default function OrganizationDetail(){
                                 </div>{/* /.modal-dialog  */}
                             </div>
                         }
-                        {!haveError && (<ConfirmModal formData={formData} editForm={editOrg} confirm={confirm}/>)}
+                        {!haveError && (<ConfirmModal formData={formData} actionForm={editOrg} confirm={confirm}/>)}
                     </main>
                 </div>
             </div>

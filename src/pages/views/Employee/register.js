@@ -98,11 +98,11 @@ export default function EmployeeRegister(){
         }
 
         //電話番号チャック
-        const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
-        if (!phoneNumberRegex.test(formData.phone)) {
-            setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
-            return false;
-        }
+        // const phoneNumberRegex = /^\d{3}-\d{4}-\d{4}$/;
+        // if (!phoneNumberRegex.test(formData.phone)) {
+        //     setErrors("電話番号は000-0000-0000フォーマットで入力してください。");
+        //     return false;
+        // }
 
         return true;
     };

@@ -259,7 +259,22 @@ background: transparent;
    --bs-modal-width: 580px !important;
 }
 
-
+/* ------------------------------------------------
+   left header追加のcss
+------------------------------------------------ */
+.header-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+ 
+.left {
+   flex: 1; /* This will make the left div take up all available space */
+}
+ 
+.right {
+   /* You can add styles as needed */
+}
 
 
 

@@ -13,9 +13,11 @@ import 'popper.js/dist/umd/popper.min.js';
 export default function Layout({ top, children,  isSidebarInclude=true}) {
   // router
   const router = useRouter();
+  const [userName, setUsername] = useState('');
 
   useEffect(() => {
-    //setUserName(sessionStorage.getItem("userName"));
+    const storeUserName = sessionStorage.getItem('userName');
+    setUsername(storeUserName);
   })
 
   useEffect(() => {
@@ -60,14 +62,22 @@ export default function Layout({ top, children,  isSidebarInclude=true}) {
     router.push("../Menu/entityUpdate");
   };
 
+
   return (
-    <div className="">
+    <div>
       <header>
         {/* Gooogle Fonts CSS  */}
         <link rel="preconnect" href="https://fonts.googleapis.com"　/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet" />
-        <h1 className="title"><i className="bi bi-person-square"></i>部署・担当者管理システム</h1>
+        <div className="header-container">
+          <div className="left">
+              <h1 className="title"><i className="bi bi-person-square"></i>部署・担当者管理システム</h1>
+          </div>
+          <div className="right">
+              {userName}
+          </div>
+        </div>
       </header>
       {isSidebarInclude && (
         <div className="sidebar">

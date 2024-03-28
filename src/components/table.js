@@ -110,11 +110,11 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
     };
     const pageIndexes = useMemo(getPageIndexes, [pageIndex, pageOptions]);
 
-    const [userName, setUsername] = useState('');
+    const [id, setUserId] = useState('');
 
     useEffect(() => {
-        const storeUserName = sessionStorage.getItem('userName');
-        setUsername(storeUserName);
+        const storedId = sessionStorage.getItem('id');
+        setUserId(storedId);
     })
 
     // Render the UI for table
@@ -191,8 +191,8 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                                                     cell.row.original.hasRecord ? 
                                                                     (
                                                                             <div>
-                                                                                {
-                                                                                    userName === cell.row.original.name ? null : 
+                                                                                {                            
+                                                                                    id == cell.row.original.id ? null : 
                                                                                     <a href="#" data-bs-toggle="modal" data-bs-target={`#userDeleteModal${cell.row.id}`}><i className="bi bi-trash-fill fs-4" ></i></a>
                                                                                 }
                                                                                 {deleteModal(`userDeleteModal${cell.row.id}`, 'userDeleteModalLabel', (event) => systemUserDelete(cell.row.original.id, event))}

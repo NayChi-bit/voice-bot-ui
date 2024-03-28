@@ -14,6 +14,7 @@ export default function Home() {
   // 初期表示時
   useEffect(() => {
     // localStrage削除
+    sessionStorage.removeItem("id");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("userName");
   });
@@ -91,10 +92,12 @@ export default function Home() {
             Cookies.set("currentUser", data.userId, { secure: true, sameSite: 'none' });
 
             if (!data.isPassReset) {
+              sessionStorage.setItem("id", data.id);
               sessionStorage.setItem("userId", data.userId);
               sessionStorage.setItem("userName", data.userName);
               router.push("views/Menu/menu");
             } else {
+              sessionStorage.setItem("id", data.id);
               sessionStorage.setItem("userId", data.userId);
               sessionStorage.setItem("userName", data.userName);
               router.push("views/Menu/changePassword");

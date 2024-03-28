@@ -7,8 +7,12 @@
         "passwordComplicate": false,
         "passwordMin": 6,
         "passwordMax": 255,
-        "minPasswordCharType": 3
+        "minPasswordCharType": 3,
+        "isPasswordComplicate":true,
+        "minCharType":3
       }
     },
-    "apiTestUrl" : "http://localhost:8080"
+
+    "apiTestUrl" : "http://localhost:8080",
+    "uiTestUrl" : "http://localhost"
   }

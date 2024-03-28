@@ -81,18 +81,22 @@ export default function Home() {
             // Get the next one day
             const oneDayLater = new Date(now.getTime() + 24 * 60 * 60 * 1000);
             Cookies.set("expireTime", oneDayLater, { secure: true, sameSite: 'none' });
+            sessionStorage.setItem("expireTime", oneDayLater, { secure: true, sameSite: 'none' })
           }
           else{
             // Get the next one hour
             const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
             Cookies.set("expireTime", oneHourLater, { secure: true, sameSite: 'none' });
+            sessionStorage.setItem("expireTime", oneHourLater, { secure: true, sameSite: 'none' });
           }
 
           if(data){
+            console.log(data);
             Cookies.set("currentUser", data.userId, { secure: true, sameSite: 'none' });
-
             if (!data.isPassReset) {
               sessionStorage.setItem("id", data.id);
+              sessionStorage.setItem("currentUser", data.userId, { secure: true, sameSite: 'none' });
+            if (!data.passReset) {
               sessionStorage.setItem("userId", data.userId);
               sessionStorage.setItem("userName", data.userName);
               router.push("views/Menu/menu");
@@ -100,7 +104,7 @@ export default function Home() {
               sessionStorage.setItem("id", data.id);
               sessionStorage.setItem("userId", data.userId);
               sessionStorage.setItem("userName", data.userName);
-              router.push("views/Menu/changePassword");
+              router.push("views/Menu/passwordChange");
             }
           }
         })

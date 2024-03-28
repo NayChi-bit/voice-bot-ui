@@ -29,7 +29,7 @@ export default function Layout({ top, children,  isSidebarInclude=true}) {
   //パスワード変更ボタン押す時
   const showPassChangeDialog = (e) => {
     e.preventDefault();
-    router.push("../Menu/passwordChange");
+    router.push("../Menu/changePassword");
 
   };
 

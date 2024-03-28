@@ -90,16 +90,15 @@ export default function UserRegister(){
             setErrors("パスワードが相違しています。");
             return false;
         }
-        else if (!isValidPasswordCharType(formData.password)) {
+        else if (!isValidPasswordCharType(formData.password) || formData.password.length < passwordMin || 
+            !isCharacterTypesEnough(formData.password) || formData.password.length > passwordMax) {
             setErrors(
-            "パスワードに使用できない文字が含まれています。使用できる記号は<>+!?#$%&()/~*です。"
-            );
-            return false;
-        } else if (formData.password.length < passwordMin || !isCharacterTypesEnough(formData.password)) {
-            setErrors("パスワードを複雑にしてください。");
-            return false;
-        } else if (formData.password.length > passwordMax) {
-            setErrors(`パスワードは${passwordMax}文字以下にしてください。`);
+                "新しいパスワードと新しいパスワード（確認）を以下のフォーマットで入力してください。" +
+                "①英語文字が最低1文字含める" +
+                "②0～9までの番号が最低1文字含める" +
+                "③記号が含めない" + 
+                "④パスワード文字数は6文字から255文字の間にある"
+              );
             return false;
         }
 

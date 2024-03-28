@@ -1,4 +1,6 @@
 const ConfirmModal = ({ formData, actionForm, confirm }) => {
+
+    // call add,edit action
     const handleConfirm = () => {
         actionForm(formData);
     };

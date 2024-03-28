@@ -1,3 +1,4 @@
+import React from 'react';
 const ConfirmModal = ({ formData, actionForm, confirm }) => {
     const handleConfirm = () => {
         actionForm(formData);
@@ -17,7 +18,7 @@ const ConfirmModal = ({ formData, actionForm, confirm }) => {
                             <div style={{marginLeft: "88px", textAlign : "left"}}>
                                 <p>ユーザID: {formData.userId}</p>
                                 <p>表示名: {formData.name}</p>
-                                {formData.password && <p>パスワード: {formData.password}</p>}
+                                {formData.password && <p>パスワード: {formData.password ? formData.password.replace(/./g, '•') : ''}</p>}
                             </div>
                         )}
                         {  confirm === "org" && (

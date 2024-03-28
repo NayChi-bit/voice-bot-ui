@@ -271,10 +271,6 @@ background: transparent;
 .left {
    flex: 1; /* This will make the left div take up all available space */
 }
- 
-.right {
-   /* You can add styles as needed */
-}
 
 
 

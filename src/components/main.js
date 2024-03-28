@@ -74,7 +74,7 @@ export default function Layout({ top, children,  isSidebarInclude=true}) {
           <div className="left">
               <h1 className="title"><i className="bi bi-person-square"></i>部署・担当者管理システム</h1>
           </div>
-          <div className="right">
+          <div>
               {userName}
           </div>
         </div>

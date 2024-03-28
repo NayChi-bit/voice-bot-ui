@@ -7,9 +7,10 @@ import { organizationDelete } from "@/pages/views/Organization/list";
 import { employeeDelete  } from "@/pages/views/Employee/list";
 import { userDelete  } from "@/pages/views/User/list";
 import { useMemo } from 'react';
-
+import { useEffect, useState } from "react";
 import "../pages/styles/globals.css";
 import { employee } from "@/pages/api/employee";
+import { BLOCKED_PAGES } from "next/dist/shared/lib/constants";
 
 const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = false}) => {
     const router = useRouter();
@@ -48,11 +49,12 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
     const deleteOpr = (id, event, isOrg) => {
         event.stopPropagation();
         isOrg ? organizationDelete(id, router) : employeeDelete(id, router);
-    };
+    };  
 
     //ユーザー削除
     const systemUserDelete = (id, event) => {
         event.stopPropagation();
+        alert(id);
         userDelete(id, router);
     };
 
@@ -110,6 +112,13 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
     };
     const pageIndexes = useMemo(getPageIndexes, [pageIndex, pageOptions]);
 
+    const [userName, setUsername] = useState('');
+
+    useEffect(() => {
+        const storeUserName = sessionStorage.getItem('userName');
+        setUsername(storeUserName);
+    })
+
     // Render the UI for table
     return (
         <div>
@@ -164,13 +173,21 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                                         </div>
                                                     )) : null) : (cell.column.id === 'userDelete' ? (
                                                     cell.row.original.hasRecord ? (
-                                                            <div>
-                                                                <a href="#" onClick={(event) => systemUserDelete(cell.row.original.id, event)}><i className="bi bi-trash-fill fs-4"></i></a>
+                                                            
+                                                            <div>                                                                
+                                                                {userName === cell.row.original.name ? null : 
+                                                                <a href="#" onClick={(event) => {
+                                                                    systemUserDelete(cell.row.original.id, event)
+                                                                }
+                                                                    }><i className="bi bi-trash-fill fs-4" id="deleteIcon" ></i></a>
+                                                            }
                                                             </div>
+
                                                         ) : null) : (cell.column.id === 'userDetail' ? (
                                                             cell.row.original.hasRecord ? (
-                                                            <div>
+                                                            <div>                                                               
                                                                 <a href="#" onClick={(event) => userDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
+    
                                                             </div>
                                                             ) : null)  : (cell.column.id === 'download' ? (
                                                                 cell.row.original.hasRecord ? (

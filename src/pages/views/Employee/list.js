@@ -201,21 +201,12 @@ export default function EmployeeList(){
 
 // 担当者削除
 export async function employeeDelete(id, router) {
-    const confirmationMessage = `削除しますか？`;
-    console.debug("message:", confirmationMessage);
-    const result = window.confirm(confirmationMessage);
-
-    if (result) {
-        console.debug("User clicked OK");
-        let result = await employee.employeeDelete(id);
-        if (result.status == 401) {
-            router.push("/");
-        } else {
-            const result = await showList();
-            setData(result);
-        }
+    let result = await employee.employeeDelete(id);
+    if (result.status == 401) {
+        router.push("/");
     } else {
-        console.debug("User clicked Cancel");
+        const result = await showList();
+        setData(result);
     }
 };
 

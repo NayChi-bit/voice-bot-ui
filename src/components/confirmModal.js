@@ -28,7 +28,7 @@ const ConfirmModal = ({ formData, actionForm, confirm }) => {
                                 <p>上位組織:{formData.parentDepartmentName}</p>
                                 <p>電話番号:{formData.phone}</p>
                                 <p>備 考:{formData.remarks}</p>
-                                <p>別名：{formData.organizationAliasNames}</p>
+                                <p>別名：{formData.organizationAliasNames ? formData.organizationAliasNames : formData.organizationAliasNameList}</p>
                             </div>
                         )}
                         {  confirm === "employee" && (
@@ -38,7 +38,7 @@ const ConfirmModal = ({ formData, actionForm, confirm }) => {
                                 <p>所属部署 : {formData.departmentName}</p>
                                 <p>電話番号: {formData.phone}</p>
                                 <p>備 考: {formData.remarks}</p>
-                                <p>担当者別名： {formData.employeeAliasNames}</p>
+                                <p>担当者別名： {formData.employeeAliasNameList ? formData.employeeAliasNameList.map(item => item).join(', ') : formData.employeeAliasNames}</p>
                             </div>
                         )}
                     </div>

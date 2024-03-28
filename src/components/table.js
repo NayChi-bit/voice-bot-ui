@@ -10,7 +10,6 @@ import { useMemo } from 'react';
 import { useEffect, useState } from "react";
 import "../pages/styles/globals.css";
 import { employee } from "@/pages/api/employee";
-import { BLOCKED_PAGES } from "next/dist/shared/lib/constants";
 
 const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = false}) => {
     const router = useRouter();
@@ -54,7 +53,6 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
     //ユーザー削除
     const systemUserDelete = (id, event) => {
         event.stopPropagation();
-        alert(id);
         userDelete(id, router);
     };
 
@@ -158,45 +156,76 @@ const Table = ({ columns, data, paginationEnabled = false, isVarticleTable = fal
                                         </React.Fragment>                                       
                                     ) : (
                                         <tr {...row.getRowProps()} key={i}>
-                                        {row.cells.map((cell, i) => {
-                                            return <td {...cell.getCellProps()} key={i} className="text-center align-middle py-3">
-                                                {/* 部署一覧、担当者一覧 */}
-                                                {cell.column.id === 'operation' ?  (cell.row.original.hasRecord ? (
-                                                    cell.row.original.hasSubOrganization ? (
-                                                        <div>
-                                                            <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}>{cell.row.original.isOrg}<i className="bi bi-sticky-fill fs-4"></i></a>
-                                                        </div>
-                                                    ) : (
-                                                        <div>
-                                                            <a href="#" onClick={(event) => deleteOpr(cell.row.original.id, event, cell.row.original.isOrg)}><i className="bi bi-trash-fill fs-4"></i>{cell.row.original.isOrg}</a>&nbsp;&nbsp;&nbsp;
-                                                            <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}><i className="bi bi-sticky-fill fs-4">{cell.row.original.isOrg}</i></a>
-                                                        </div>
-                                                    )) : null) : (cell.column.id === 'userDelete' ? (
-                                                    cell.row.original.hasRecord ? (
-                                                            
-                                                            <div>                                                                
-                                                                {userName === cell.row.original.name ? null : 
-                                                                <a href="#" onClick={(event) => {
-                                                                    systemUserDelete(cell.row.original.id, event)
-                                                                }
-                                                                    }><i className="bi bi-trash-fill fs-4" id="deleteIcon" ></i></a>
-                                                            }
-                                                            </div>
-
-                                                        ) : null) : (cell.column.id === 'userDetail' ? (
-                                                            cell.row.original.hasRecord ? (
-                                                            <div>                                                               
-                                                                <a href="#" onClick={(event) => userDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
-    
-                                                            </div>
-                                                            ) : null)  : (cell.column.id === 'download' ? (
-                                                                cell.row.original.hasRecord ? (
-                                                                <div>
-                                                                    <a href="#"><i className="bi bi-file-earmark-arrow-down-fill fs-3"></i></a>
-                                                                </div>
-                                                                ) : null) : cell.render('Cell'))))}
-                                            </td>
-                                        })}
+                                            {row.cells.map((cell, i) => {
+                                                return (
+                                                    <td {...cell.getCellProps()} key={i} className="text-center align-middle py-3">
+                                                        {/* 部署一覧、担当者一覧 */}
+                                                        {
+                                                            cell.column.id === 'operation' ? 
+                                                            (
+                                                                cell.row.original.hasRecord ? 
+                                                                (
+                                                                    cell.row.original.hasSubOrganization ? 
+                                                                        (
+                                                                            <div>
+                                                                                <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}>
+                                                                                    {cell.row.original.isOrg}<i className="bi bi-sticky-fill fs-4"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        ) : 
+                                                                        (
+                                                                            <div>
+                                                                                <a href="#" data-bs-toggle="modal" data-bs-target={`#deleteModal${cell.row.id}`}>
+                                                                                    <i className="bi bi-trash-fill fs-4"></i>{cell.row.original.isOrg}
+                                                                                </a>&nbsp;&nbsp;&nbsp;
+                                                                                <a href="#" onClick={(event) => detailOpr(cell.row.original.id, event, cell.row.original.isOrg)}>
+                                                                                    <i className="bi bi-sticky-fill fs-4">{cell.row.original.isOrg}</i>
+                                                                                </a>
+                                                                                {deleteModal(`deleteModal${cell.row.id}`, 'deleteModalLabel', (event) => deleteOpr(cell.row.original.id, event, cell.row.original.isOrg))}
+                                                                            </div>
+                                                                        )
+                                                                ) : null
+                                                            ) : 
+                                                            (cell.column.id === 'userDelete' ? 
+                                                                (
+                                                                    cell.row.original.hasRecord ? 
+                                                                    (
+                                                                            <div>
+                                                                                {
+                                                                                    userName === cell.row.original.name ? null : 
+                                                                                    <a href="#" data-bs-toggle="modal" data-bs-target={`#userDeleteModal${cell.row.id}`}><i className="bi bi-trash-fill fs-4" ></i></a>
+                                                                                }
+                                                                                {deleteModal(`userDeleteModal${cell.row.id}`, 'userDeleteModalLabel', (event) => systemUserDelete(cell.row.original.id, event))}
+                                                                            </div>
+                                                                    ) : null
+                                                                ) : 
+                                                                (cell.column.id === 'userDetail' ? 
+                                                                    (
+                                                                        cell.row.original.hasRecord ? 
+                                                                        (
+                                                                            <div>
+                                                                                <a href="#" onClick={(event) => userDetail(cell.row.original.id, event)}><i className="bi bi-sticky-fill fs-4"></i></a>
+                                                                            </div>
+                                                                        ) : null
+                                                                    ) : 
+                                                                    (
+                                                                        cell.column.id === 'download' ? 
+                                                                        (
+                                                                            cell.row.original.hasRecord ? 
+                                                                                (
+                                                                                    <div>
+                                                                                        <a href="#"><i className="bi bi-file-earmark-arrow-down-fill fs-3"></i></a>
+                                                                                    </div>
+                                                                                ) : null
+                                                                        ) : cell.render('Cell')
+                                                                    )
+                                                                )
+                                                            )
+                                                        }
+                                                    </td>
+                                                );
+                                            })
+                                            }
                                         </tr>
                                     )
                                 }
@@ -234,6 +263,29 @@ function ExpandableTableComponent({columns, data, paginationEnabled, isVarticleT
     return (
         <Table columns={columns} data={data} paginationEnabled={paginationEnabled} isVarticleTable={isVarticleTable} />
     )
+}
+
+function deleteModal(id, label, onConfirm) {
+    return (
+        <div className="modal fade" id={id} tabIndex="-1" aria-labelledby={`${label}${id}`}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header bg-danger text-white">
+                        <h5 className="modal-title" id={`${label}${id}`}>Delete Confirmation</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        <i className="bi bi-x-circle fs-1 text-danger"></i> 
+                        <p>削除しますか？</p>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={(event) => onConfirm(event)}>削除</button>
+                        <button type="reset" className="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default ExpandableTableComponent;
